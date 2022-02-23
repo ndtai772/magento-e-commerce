@@ -16,4 +16,7 @@ jobs:
     steps:
     - uses: actions/checkout@v2
     - name: Try to run docker compose
+      env:
+       PUBLIC_KEY: ${{ secrets.PUBLIC_KEY }}
+       PRIVATE_KEY: ${{ secrets.PRIVATE_KEY }}
       run: make init
