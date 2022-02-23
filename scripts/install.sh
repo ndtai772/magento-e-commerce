@@ -1,13 +1,6 @@
 #!/bin/sh
-ls -la
 
-ls -la vendor
-
-whoami
-
-id -u $(whoami)
-
-mkdir -p vendor/laminas
+cat /var/www/.composer/auth.json
 
 composer install
 
