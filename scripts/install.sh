@@ -1,4 +1,5 @@
 #!/bin/sh
+ls -la vendor
 
 composer install
 
