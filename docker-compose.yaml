@@ -1,0 +1,41 @@
+version: '3.8'
+
+services:
+  db:
+    image: mysql:8
+    env_file: docker/mysql/.env
+    # restart: always
+    ports:
+        - "3307:3306"
+    volumes:
+      - ./initdb:/docker-entrypoint-initdb.d
+      # - ./database:/var/lib/mysql
+
+  web-server:
+    image: nginx:1.21
+    ports:
+      - "8080:80"
+    env_file: docker/nginx/.env
+    volumes:
+      - ./docker/nginx/conf:/etc/nginx/conf.d:ro
+      - ./magento_ecommerce:/var/www/html
+
+  phpfpm:
+    build: ./docker/phpfpm
+    volumes:
+      - ./magento_ecommerce:/var/www/html
+
+  elasticsearch:
+    # original: https://github.com/markshust/docker-magento/blob/master/compose/docker-compose.yml
+    image: markoshust/magento-elasticsearch:7.9.3-1
+    ports:
+      - "9200:9200"
+      - "9300:9300"
+    environment:
+      - "discovery.type=single-node"
+      ## Set custom heap size to avoid memory errors
+      - "ES_JAVA_OPTS=-Xms1g -Xmx1g"
+      ## Avoid test failures due to small disks
+      ## More info at https://github.com/markshust/docker-magento/issues/488
+      - "cluster.routing.allocation.disk.threshold_enabled=false"
+      - "index.blocks.read_only_allow_delete"
