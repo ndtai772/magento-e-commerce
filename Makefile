@@ -7,7 +7,7 @@ all:
 init:
 	mkdir -p credentials
 	docker-compose up -d
-        docker exec $(fpm-container-name) bash -c "export COMPOSER_AUTH=$COMPOSER_AUTH && echo $COMPOSER_AUTH"
+    docker exec $(fpm-container-name) bash -c "export COMPOSER_AUTH=COMPOSER_AUTH && echo COMPOSER_AUTH"
 	docker exec $(fpm-container-name) sh /install.sh
 
 exec:
