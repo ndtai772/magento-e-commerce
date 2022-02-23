@@ -36,7 +36,7 @@ Cài magento:
 Download & unzip
 
 ```shell
-composer create-project --repository=https://repo.magento.com/ magento/project-community-edition=2.4 .
+composer create-project --repository=https://repo.magento.com/ magento/project-community-edition .
 ```
 
 **Note**: may have RuntimeException:\
