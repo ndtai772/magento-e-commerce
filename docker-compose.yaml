@@ -27,7 +27,7 @@ services:
     container_name: phpfpm
     volumes:
       - ./magento_ecommerce:/var/www/html
-      - ./credentials/auth.json:/var/www/.composer/auth.json
+      # - ./credentials/auth.json:/var/www/.composer/auth.json
       - ./scripts/install.sh:/install.sh
 
   elasticsearch:
