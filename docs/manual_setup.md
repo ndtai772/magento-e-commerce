@@ -59,7 +59,7 @@ chmod u+x bin/magento
 Install magento:
 ```shell
 bin/magento setup:install \
-    --base-url=http://localhost/ \
+    --base-url=http://localhost:8080 \
     --db-host=localhost \
     --db-name=magento_db \
     --db-user=magento \
@@ -73,10 +73,10 @@ bin/magento setup:install \
     --language=en_US \
     --currency=USD \
     --timezone=Asia/Ho_Chi_Minh \
-    --use-rewrites=1
-    #--search-engine=elasticsearch7 \
-    #--elasticsearch-host=es-host.example.com \
-    #--elasticsearch-port=9200
+    --use-rewrites=1 \
+    --search-engine=elasticsearch7 \
+    --elasticsearch-host=localhost \
+    --elasticsearch-port=9200
 ```
 
 [hướng dẫn cài magento + nginx](https://devdocs.magento.com/guides/v2.4/install-gde/prereq/nginx.html)
