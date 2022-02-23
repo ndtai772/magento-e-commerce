@@ -5,7 +5,10 @@ all:
 	@echo "hello!"
 
 init:
+	mkdir -p credentials
+	sh ./scripts/make_credentials.sh > credentials/auth.json
 	docker-compose up -d
+	docker exec $(fpm-container-name) sh /install.sh
 
 exec:
 	docker exec -it $(fpm-container-name) bash
@@ -21,7 +24,7 @@ clear: backup
 	docker-compose down -v
 	docker system prune -f
 	docker volume prune -f
-	docker image prune -f
+	# docker image prune -f
 
 backup:
 	@echo "--dumping schema"
