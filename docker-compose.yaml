@@ -3,6 +3,7 @@ version: '3.8'
 services:
   db:
     image: mysql:8
+    container_name: db
     env_file: docker/mysql/.env
     # restart: always
     ports:
@@ -13,6 +14,7 @@ services:
 
   web-server:
     image: nginx:1.21
+    container_name: web-server
     ports:
       - "8080:80"
     env_file: docker/nginx/.env
@@ -22,6 +24,7 @@ services:
 
   phpfpm:
     build: ./docker/phpfpm
+    container_name: phpfpm
     volumes:
       - ./magento_ecommerce:/var/www/html
       - ./credentials/auth.json:/var/www/.composer/auth.json

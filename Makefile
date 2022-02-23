@@ -1,5 +1,5 @@
-fpm-container-name := '$(notdir $(shell pwd))-phpfpm-1'
-db-container-name := '$(notdir $(shell pwd))-db-1'
+fpm-container-name := 'phpfpm'
+db-container-name := 'db'
 
 all:
 	@echo "hello!"

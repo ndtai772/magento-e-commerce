@@ -50,7 +50,7 @@ UNLOCK TABLES;
 
 LOCK TABLES `admin_user` WRITE;
 /*!40000 ALTER TABLE `admin_user` DISABLE KEYS */;
-INSERT INTO `admin_user` VALUES (1,'admin','admin','ndtai772@gmail.com','admin','fd506547f36a8c3c865c2cdca0d8e53a4bbe5b26316d60ee9b75e8b17c0b60c2:QXDW9vCIk1TEap8OsvaG0kor5q8mBHRz:3_32_2_67108864','2022-02-23 11:48:48','2022-02-23 15:22:07','2022-02-23 15:22:07',2,0,1,NULL,NULL,NULL,'en_US',0,NULL,NULL,NULL);
+INSERT INTO `admin_user` VALUES (1,'admin','admin','ndtai772@gmail.com','admin','fd506547f36a8c3c865c2cdca0d8e53a4bbe5b26316d60ee9b75e8b17c0b60c2:QXDW9vCIk1TEap8OsvaG0kor5q8mBHRz:3_32_2_67108864','2022-02-23 11:48:48','2022-02-23 17:47:31','2022-02-23 17:47:31',4,0,1,NULL,NULL,NULL,'en_US',0,NULL,NULL,NULL);
 /*!40000 ALTER TABLE `admin_user` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -69,7 +69,7 @@ UNLOCK TABLES;
 
 LOCK TABLES `admin_user_session` WRITE;
 /*!40000 ALTER TABLE `admin_user_session` DISABLE KEYS */;
-INSERT INTO `admin_user_session` VALUES (1,NULL,1,1,'2022-02-23 11:52:52','2022-02-23 12:00:56','172.28.0.1'),(2,NULL,1,1,'2022-02-23 15:22:08','2022-02-23 15:22:54','172.29.0.1');
+INSERT INTO `admin_user_session` VALUES (1,NULL,1,1,'2022-02-23 11:52:52','2022-02-23 12:00:56','172.28.0.1'),(2,NULL,1,1,'2022-02-23 15:22:08','2022-02-23 15:22:54','172.29.0.1'),(3,NULL,1,2,'2022-02-23 17:31:41','2022-02-23 17:47:31','172.18.0.1'),(4,NULL,1,1,'2022-02-23 17:47:31','2022-02-23 17:47:31','172.18.0.1');
 /*!40000 ALTER TABLE `admin_user_session` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -834,7 +834,7 @@ UNLOCK TABLES;
 
 LOCK TABLES `catalog_product_index_website` WRITE;
 /*!40000 ALTER TABLE `catalog_product_index_website` DISABLE KEYS */;
-INSERT INTO `catalog_product_index_website` VALUES (1,1,'2022-02-23',1);
+INSERT INTO `catalog_product_index_website` VALUES (1,1,'2022-02-24',1);
 /*!40000 ALTER TABLE `catalog_product_index_website` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -1923,7 +1923,7 @@ UNLOCK TABLES;
 
 LOCK TABLES `indexer_state` WRITE;
 /*!40000 ALTER TABLE `indexer_state` DISABLE KEYS */;
-INSERT INTO `indexer_state` VALUES (1,'design_config_grid','valid','2022-02-23 11:59:39','d583c4ffeb114aa39f981bad7c112eb2'),(2,'customer_grid','valid','2022-02-23 11:59:41','14db9259e944b5e6efc71b648ad15c50'),(3,'catalog_category_product','valid','2022-02-23 11:59:42','1dfb6390516e17f19545008db4e6f1dc'),(4,'catalog_product_category','valid','2022-02-23 11:59:42','33a72eb66726e695ed09ff1708ec1242'),(5,'catalogrule_rule','valid','2022-02-23 11:59:44','db74beb3435227786383864a0bae5150'),(6,'catalog_product_attribute','valid','2022-02-23 11:59:45','88a3027dc1f36cf0163bd882f10aabcb'),(7,'cataloginventory_stock','valid','2022-02-23 11:59:46','864f993b8f94b04be7b3cdd09667b5e5'),(8,'inventory','valid','2022-02-23 11:59:47','353761037aee040801804a08f62c386d'),(9,'catalogrule_product','valid','2022-02-23 11:59:44','1b12e5821288ef01e7ab17168c6eae87'),(10,'catalog_product_price','valid','2022-02-23 11:59:48','7a106136649171d0c9afa78ace6dd550'),(11,'catalogsearch_fulltext','valid','2022-02-23 11:59:51','9338323301635383dfcafaf95cc439b0');
+INSERT INTO `indexer_state` VALUES (1,'design_config_grid','valid','2022-02-23 17:43:38','df13feb56ae812926f96b6c8c231c2a3'),(2,'customer_grid','valid','2022-02-23 17:43:40','d7b0727223073e7d9bfa4fde15d9f9a7'),(3,'catalog_category_product','valid','2022-02-23 17:43:42','4186e3a33912b1d558769fee56867e54'),(4,'catalog_product_category','valid','2022-02-23 17:43:42','1213bd3c184da10cb8cc7fad03c89129'),(5,'catalogrule_rule','valid','2022-02-23 17:43:44','237a7423a5de91b5e84a472c53a5c09a'),(6,'catalog_product_attribute','valid','2022-02-23 17:43:45','e4aa85dbe90b02829c356838586b7180'),(7,'cataloginventory_stock','valid','2022-02-23 17:43:46','58aa1f395740fca9dd01b72ff9fee54d'),(8,'inventory','valid','2022-02-23 17:43:46','2cf0d403d232887c2728822cb4ce369f'),(9,'catalogrule_product','valid','2022-02-23 17:43:44','59c247ea7e63a093a542ca35daff2bfa'),(10,'catalog_product_price','valid','2022-02-23 17:43:47','62a607e32448f967ce888d16b5a96b2d'),(11,'catalogsearch_fulltext','valid','2022-02-23 17:43:50','6348f4044bb82a35659b8991b29d47a5');
 /*!40000 ALTER TABLE `indexer_state` ENABLE KEYS */;
 UNLOCK TABLES;
 
