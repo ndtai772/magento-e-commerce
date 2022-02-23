@@ -9,7 +9,7 @@ init:
 	bash ./scripts/make_credentials.sh > credentials/auth.json
 	cp credentials/auth.json mangento_ecommerce
 	docker-compose up -d
-	docker exec $(fpm-container-name) composer config --global http-basic.repo.magento.com "${PUBLIC_KEY}" "${PRIVATE_KEY}"
+	docker exec $(fpm-container-name) composer config --global http-basic.https://repo.magento.com "${PUBLIC_KEY}" "${PRIVATE_KEY}"
 	docker exec $(fpm-container-name) sh /install.sh
 
 exec:
