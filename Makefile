@@ -6,7 +6,7 @@ all:
 
 init:
 	mkdir -p credentials
-	sh ./scripts/make_credentials.sh > credentials/auth.json
+	bash ./scripts/make_credentials.sh > credentials/auth.json
 	docker-compose up -d
 	docker exec $(fpm-container-name) sh /install.sh
 

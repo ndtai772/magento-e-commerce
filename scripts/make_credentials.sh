@@ -1,4 +1,4 @@
-# !/bin/sh
+# !/bin/bash
 if [[ -z "${PUBLIC_KEY}" ]]; then
     read -p "public-key  :" PUCLIC_KEY
 fi
