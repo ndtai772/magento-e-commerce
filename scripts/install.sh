@@ -1,6 +1,10 @@
 #!/bin/sh
 ls -la vendor
 
+whoami
+
+mkdir -p vendor/laminas
+
 composer install
 
 bin/magento setup:install \
