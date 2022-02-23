@@ -5,6 +5,8 @@ ls -la vendor
 
 whoami
 
+id -u $(whoami)
+
 mkdir -p vendor/laminas
 
 composer install
