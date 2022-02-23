@@ -1,4 +1,6 @@
 #!/bin/sh
+ls -la
+
 ls -la vendor
 
 whoami
