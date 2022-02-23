@@ -6,8 +6,6 @@ all:
 
 init:
 	mkdir -p credentials
-	bash ./scripts/make_credentials.sh > credentials/auth.json
-	cp credentials/auth.json mangento_ecommerce
 	docker-compose up -d
 	docker exec $(fpm-container-name) sh /install.sh
 
