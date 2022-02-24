@@ -2,9 +2,11 @@
 
 id -u $(whoami)
 
-ls -la .
+ls -la /var/www/.composer/cache/files
 
-ls -la .composer
+ls -la /var/www/.composer/cache
+
+ls -la ..
 
 composer config cache-files-dir
 
