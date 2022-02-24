@@ -24,7 +24,7 @@ services:
   phpfpm:
     env_file: .env
     build:
-      dockerfile: ./docker/phpfpm/Dockerfile
+      context: ./docker/phpfpm
       args:
         - UID=${UID}
         - GID=${GID}
