@@ -1,5 +1,14 @@
 #!/bin/sh
 
+id -u $(whoami)
+
+ls -la .
+
+ls -la .composer
+
+composer config cache-files-dir
+
+
 composer update
 
 bin/magento setup:install \
