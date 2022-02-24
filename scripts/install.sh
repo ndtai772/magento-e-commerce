@@ -1,14 +1,8 @@
 #!/bin/sh
 
-id -u $(whoami)
+ls -la /var/www/.composer/
 
-ls -la /var/www/.composer/cache/files
-
-ls -la /var/www/.composer/cache
-
-ls -la ..
-
-composer config cache-files-dir
+mkdir -p /var/www/.composer/cache/files
 
 
 composer update
