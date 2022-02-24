@@ -1,6 +1,6 @@
 #!/bin/sh
 
-cat /var/www/.composer/auth.json
+echo $COMPOSER_AUTH
 
 composer install
 
