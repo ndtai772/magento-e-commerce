@@ -6,7 +6,6 @@ all:
 
 init:
 	mkdir -p credentials
-	echo "COMPOSER_AUTH=${COMPOSER_AUTH}" > docker/phpfpm.env
 	docker-compose up -d
 	docker exec $(fpm-container-name) sh /install.sh
 
