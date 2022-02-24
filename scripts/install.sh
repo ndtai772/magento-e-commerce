@@ -1,7 +1,5 @@
 #!/bin/sh
 
-cat /var/www/.composer/auth.json
-
 composer update
 
 bin/magento setup:install \

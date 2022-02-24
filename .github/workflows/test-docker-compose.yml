@@ -1,4 +1,4 @@
-name: Docker Compose CI2
+name: Test Docker Compose
 
 on:
   push:
@@ -24,6 +24,4 @@ jobs:
     - uses: satackey/action-docker-layer-caching@v0.0.11
       continue-on-error: true
     - name: Run docker compose
-      env:
-       COMPOSER_AUTH: ${{secrets.COMPOSER_AUTH}}
       run: make init
