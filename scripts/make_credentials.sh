@@ -1,6 +1,6 @@
 # !/bin/bash
 if [[ -z "${PUBLIC_KEY}" ]]; then
-    read -p "public-key  :" PUCLIC_KEY
+    read -p "public-key  :" PUBLIC_KEY
 fi
 
 if [[ -z "${PRIVATE_KEY}" ]]; then

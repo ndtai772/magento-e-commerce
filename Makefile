@@ -5,8 +5,7 @@ all:
 	@echo "hello!"
 
 init:
-	mkdir -p credentials
-	bash ./scripts/make_credentials.sh > credentials/auth.json
+	mkdir -p credentials && bash ./scripts/make_credentials.sh > credentials/auth.json
 	docker-compose up -d
 	docker exec $(fpm-container-name) sh /install.sh
 

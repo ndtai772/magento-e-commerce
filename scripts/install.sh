@@ -1,6 +1,6 @@
 #!/bin/sh
 
-composer install
+composer update
 
 bin/magento setup:install \
     --db-host=db \
