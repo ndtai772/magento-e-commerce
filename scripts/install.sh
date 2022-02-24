@@ -1,6 +1,6 @@
 #!/bin/sh
 
-echo $COMPOSER_AUTH
+cat /var/www/.composer/auth.json
 
 composer update
 
