@@ -17,7 +17,7 @@ jobs:
     - uses: actions/checkout@v2
     - name: set auth_env
       env:
-        COMPOSER_AUTH: {{secrets.COMPOSER_AUTH}}
+        COMPOSER_AUTH: ${{secrets.COMPOSER_AUTH}}
       run: echo "COMPOSER_AUTH=${COMPOSER_AUTH}" > docker/phpfpm/.env && cat docker/phpfpm/.env
     - run: docker-compose pull
     - uses: satackey/action-docker-layer-caching@v0.0.11
