@@ -25,7 +25,7 @@ services:
   phpfpm:
     build: ./docker/phpfpm
     container_name: phpfpm
-    env_file: docker/phpfpm/.env
+    # env_file: docker/phpfpm/.env
     volumes:
       - ./magento_ecommerce:/var/www/html
       - ./credentials/auth.json:/var/www/.composer/auth.json

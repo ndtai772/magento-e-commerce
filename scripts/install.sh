@@ -2,6 +2,11 @@
 
 ls -la /var/www/.composer/
 
+echo "composerdir: " $COMPOSER_DIR
+echo "composerdirs: " $COMPOSER_DIRS
+echo "composerhome: " $COMPOSER_HOME
+echo "magedir: " $MAGE_DIRS
+
 mkdir -p /var/www/.composer/cache/files
 
 
