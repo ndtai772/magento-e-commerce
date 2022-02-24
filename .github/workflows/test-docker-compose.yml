@@ -24,4 +24,7 @@ jobs:
     - uses: satackey/action-docker-layer-caching@v0.0.11
       continue-on-error: true
     - name: Run docker compose
+      env:
+        PUBLIC_KEY: ${{secrets.PUBLIC_KEY}}
+        PRIVATE_KEY: ${{secrets.PRIVATE_KEY}}
       run: make init
