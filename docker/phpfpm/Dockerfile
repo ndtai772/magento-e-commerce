@@ -56,9 +56,7 @@ COPY --from=composer:latest /usr/bin/composer /usr/local/bin/composer
 # TODO: change to php.ini-production when using in porduction
 RUN mv "$PHP_INI_DIR/php.ini-development" "$PHP_INI_DIR/php.ini"
 
-RUN echo -e "memory_limit = 3G\n\
-    max_execution_time = 1800 \n\
-    zlib.output_compression = On" > "$PHP_INI_DIR/conf.d/conf.ini"
+COPY ./conf.ini "$PHP_INI_DIR/conf.d/"
 
 ARG GID
 ARG UID
