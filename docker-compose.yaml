@@ -17,15 +17,18 @@ services:
     container_name: web-server
     ports:
       - "8080:80"
-    env_file: docker/nginx/.env
     volumes:
       - ./docker/nginx/conf:/etc/nginx/conf.d:ro
       - ./magento_ecommerce:/var/www/html
 
   phpfpm:
-    build: ./docker/phpfpm
-    container_name: phpfpm
     env_file: docker/phpfpm/.env
+    build:
+      dockerfile: ./docker/phpfpm
+      args:
+        - UID=${UID}
+        - GID=${GID}
+    container_name: phpfpm
     volumes:
       - ./magento_ecommerce:/var/www/html
       - ./credentials/auth.json:/var/www/.composer/auth.json
