@@ -22,9 +22,9 @@ services:
       - ./magento_ecommerce:/var/www/html
 
   phpfpm:
-    env_file: docker/phpfpm/.env
+    env_file: .env
     build:
-      dockerfile: ./docker/phpfpm
+      dockerfile: ./docker/phpfpm/Dockerfile
       args:
         - UID=${UID}
         - GID=${GID}

@@ -8,7 +8,7 @@ init: prepare install
 
 prepare:
 	mkdir -p credentials && bash ./scripts/make_credentials.sh > credentials/auth.json
-	sh ./scripts/id.sh > docker/phpfpm/.env
+	sh ./scripts/id.sh > .env
 
 install:
 	docker-compose up -d

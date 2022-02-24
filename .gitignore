@@ -1,2 +1,2 @@
 credentials
-docker/phpfpm/.env
+.env

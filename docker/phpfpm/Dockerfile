@@ -56,14 +56,16 @@ COPY --from=composer:latest /usr/bin/composer /usr/local/bin/composer
 # TODO: change to php.ini-production when using in porduction
 RUN mv "$PHP_INI_DIR/php.ini-development" "$PHP_INI_DIR/php.ini"
 
-COPY ./conf.ini "$PHP_INI_DIR/conf.d/"
+RUN echo -e "memory_limit = 3G\n\
+    max_execution_time = 1800 \n\
+    zlib.output_compression = On" > "$PHP_INI_DIR/conf.d/conf.ini"
 
 ARG GID
 ARG UID
 
 RUN groupadd -g "$GID" app && useradd -g "$GID" -u "$UID" -d /var/www -s /bin/bash app
 
-# RUN mkdir -p /var/www/.composer/cache/files
+RUN mkdir -p /var/www/.composer
 
 RUN mkdir -p /var/www/html && chown -R app:app /var/www
 
