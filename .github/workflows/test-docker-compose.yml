@@ -2,29 +2,43 @@ name: Test Docker Compose
 
 on:
   push:
-    branches: [ main ]
+    branches: [main]
   pull_request:
-    branches: [ main ]
+    branches: [main]
 
 jobs:
-
   build:
-
     runs-on: ubuntu-latest
     environment: dev
 
     steps:
-    - uses: actions/checkout@v2
-    - name: set auth_env
-      env:
-        PUBLIC_KEY: ${{secrets.PUBLIC_KEY}}
-        PRIVATE_KEY: ${{secrets.PRIVATE_KEY}}
-      run: mkdir -p credentials && bash ./scripts/make_credentials.sh > credentials/auth.json
-    - run: docker-compose pull
-    - uses: satackey/action-docker-layer-caching@v0.0.11
-      continue-on-error: true
-    - name: Run docker compose
-      env:
-        PUBLIC_KEY: ${{secrets.PUBLIC_KEY}}
-        PRIVATE_KEY: ${{secrets.PRIVATE_KEY}}
-      run: make init
+      - uses: actions/checkout@v2
+
+      - name: set auth_env
+        env:
+          PUBLIC_KEY: ${{secrets.PUBLIC_KEY}}
+          PRIVATE_KEY: ${{secrets.PRIVATE_KEY}}
+        run: mkdir -p credentials && bash ./scripts/make_credentials.sh > credentials/auth.json
+
+      - run: docker-compose pull
+
+      - uses: satackey/action-docker-layer-caching@v0.0.11
+        continue-on-error: true
+
+      - name: Get Composer Cache Directory
+        id: composer-cache
+        run: |
+          echo "::set-output name=dir::$(composer config cache-files-dir)"
+
+      - uses: actions/cache@v2
+        with:
+          path: ${{ steps.composer-cache.outputs.dir }}
+          key: ${{ runner.os }}-composer-${{ hashFiles('**/composer.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-composer-
+
+      - name: Run docker compose
+        env:
+          PUBLIC_KEY: ${{secrets.PUBLIC_KEY}}
+          PRIVATE_KEY: ${{secrets.PRIVATE_KEY}}
+        run: make init
