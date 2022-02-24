@@ -17,19 +17,23 @@ services:
     container_name: web-server
     ports:
       - "8080:80"
-    env_file: docker/nginx/.env
     volumes:
       - ./docker/nginx/conf:/etc/nginx/conf.d:ro
       - ./magento_ecommerce:/var/www/html
 
   phpfpm:
-    build: ./docker/phpfpm
+    env_file: .env
+    build:
+      context: ./docker/phpfpm
+      args:
+        - UID=${UID}
+        - GID=${GID}
     container_name: phpfpm
-    env_file: docker/phpfpm/.env
     volumes:
       - ./magento_ecommerce:/var/www/html
       - ./credentials/auth.json:/var/www/.composer/auth.json
       - ./scripts/install.sh:/install.sh
+      - ./cache/composer:/var/www/.composer/cache
 
   elasticsearch:
     # original: https://github.com/markshust/docker-magento/blob/master/compose/docker-compose.yml

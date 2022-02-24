@@ -4,8 +4,14 @@ db-container-name := 'db'
 all:
 	@echo "hello!"
 
-init:
+init: prepare install
+
+prepare:
 	mkdir -p credentials && bash ./scripts/make_credentials.sh > credentials/auth.json
+	sh ./scripts/id.sh > .env
+	mkdir -p cache/composer
+
+install:
 	docker-compose up -d
 	docker exec $(fpm-container-name) sh /install.sh
 
@@ -18,8 +24,8 @@ start:
 stop:
 	docker-compose stop
 
-clear: backup
-	@echo "--exit"
+clear:
+	@echo "--exiting"
 	docker-compose down -v
 	docker system prune -f
 	docker volume prune -f

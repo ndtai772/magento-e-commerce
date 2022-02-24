@@ -2,8 +2,6 @@
 
 FROM php:7.4-fpm
 
-ADD https://github.com/mlocati/docker-php-extension-installer/releases/latest/download/install-php-extensions /usr/local/bin/
-
 RUN apt-get update && apt-get install -y \
     cron \
     git \
@@ -24,10 +22,6 @@ RUN apt-get update && apt-get install -y \
     vim \
     zip \
     procps
-
-RUN chmod +x /usr/local/bin/install-php-extensions && install-php-extensions gd xdebug
-
-COPY --from=composer:latest /usr/bin/composer /usr/local/bin/composer
 
 RUN docker-php-ext-configure gd --with-freetype --with-jpeg
 
@@ -53,15 +47,23 @@ RUN docker-php-ext-install \
     xsl \
     zip
 
+ADD https://github.com/mlocati/docker-php-extension-installer/releases/latest/download/install-php-extensions /usr/local/bin/
+
+RUN chmod +x /usr/local/bin/install-php-extensions && install-php-extensions gd xdebug
+
+COPY --from=composer:latest /usr/bin/composer /usr/local/bin/composer
+
 # TODO: change to php.ini-production when using in porduction
 RUN mv "$PHP_INI_DIR/php.ini-development" "$PHP_INI_DIR/php.ini"
 
 COPY ./conf.ini "$PHP_INI_DIR/conf.d/"
 
-ARG APP_ID=1001
+ARG GID
+ARG UID
 
-RUN groupadd -g "$APP_ID" app \
-  && useradd -g "$APP_ID" -u "$APP_ID" -d /var/www -s /bin/bash app
+RUN groupadd -g "$GID" app && useradd -g "$GID" -u "$UID" -d /var/www -s /bin/bash app
+
+RUN mkdir -p /var/www/.composer
 
 RUN mkdir -p /var/www/html && chown -R app:app /var/www
 
