@@ -33,6 +33,7 @@ services:
       - ./magento_ecommerce:/var/www/html
       - ./credentials/auth.json:/var/www/.composer/auth.json
       - ./scripts/install.sh:/install.sh
+      - ./cache/composer:/var/www/.composer/cache
 
   elasticsearch:
     # original: https://github.com/markshust/docker-magento/blob/master/compose/docker-compose.yml

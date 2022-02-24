@@ -9,6 +9,7 @@ init: prepare install
 prepare:
 	mkdir -p credentials && bash ./scripts/make_credentials.sh > credentials/auth.json
 	sh ./scripts/id.sh > .env
+	mkdir -p cache/composer
 
 install:
 	docker-compose up -d
