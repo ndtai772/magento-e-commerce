@@ -1,6 +1,6 @@
 #!/bin/sh
 
-composer update
+composer install
 
 chmod +x /scripts/wait-for-it.sh
 

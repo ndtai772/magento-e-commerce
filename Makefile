@@ -7,7 +7,7 @@ all:
 init: prepare install
 
 prepare:
-	mkdir -p credentials && bash ./scripts/make_credentials.sh > credentials/auth.json
+	mkdir -p credentials && bash ./scripts/make_credentials.sh
 	sh ./scripts/id.sh > .env
 	mkdir -p cache/composer
 
