@@ -4,9 +4,10 @@ Yêu cầu:
  - Các port cần free trước khi chạy (không được sử dụng bởi process khác):
    - 3307 : mysql
    - 8080 : nginx
-> **Note**: nếu trong quá trình chạy xuất hiện bất kỳ lỗi nào thì vui lòng tạo issue tại github repo :'>
+> **Note**: nếu trong quá trình chạy xuất hiện bất kỳ lỗi nào thì phản hồi lại vào: [#3][i3]
 
 Các lệnh sau đều được thực thi tại thư mục gốc sau khi clone repo về (thư mục có chứa `Makefile`)
+> Note: **không** chạy make với sudo
 
 Chạy docker-compose (chỉ cần chạy trong **lần đầu tiên** clone repo về hoặc sau khi chạy `make clear`):
 ```shell
@@ -35,3 +36,5 @@ Xóa các container: chỉ sử dụng nếu nghĩ rằng các image có vấn �
 ```shell
 make clear
 ```
+
+[i3]: https://github.com/ndtai772/magento-ecommerce/issues/3
