@@ -20,4 +20,4 @@ MYSQL_DATABASE=$MYSQL_DATABASE
 
 # PHPFPM
 UID=$(id -u $(whoami))
-GID=$(id -g $(whoami))" > docker/.env
+GID=$(id -g $(whoami))" > .env
