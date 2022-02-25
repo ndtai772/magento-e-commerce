@@ -42,5 +42,5 @@ jobs:
 
       - name: install
         run: |
-          docker-compose -f docker-compose.yaml -f docker-compose.ci.yaml up -d
+          docker-compose -f docker-compose.yaml -f docker/docker-compose.ci.yaml up -d
           docker exec $(fpm-container-name) sh /scripts/install.sh
