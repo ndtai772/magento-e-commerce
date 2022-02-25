@@ -65,7 +65,10 @@ atlassian*
 
 /var/*
 !/var/.htaccess
+!/var/composer_home
+/var/composer_home/*
 !/var/composer_home/composer.json
+
 /vendor/*
 !/vendor/.htaccess
 /generated/*
