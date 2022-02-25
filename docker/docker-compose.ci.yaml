@@ -1,0 +1,8 @@
+# Custom docker-compose to speed up ci (github action)
+version: "3.8"
+
+services:
+  phpfpm:
+    volumes:
+      - ./cache/composer:/var/www/.composer/cache
+      - ./cache/vendor:/var/www/html/vendor

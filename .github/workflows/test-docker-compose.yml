@@ -18,7 +18,9 @@ jobs:
         env:
           PUBLIC_KEY: ${{secrets.PUBLIC_KEY}}
           PRIVATE_KEY: ${{secrets.PRIVATE_KEY}}
-        run: make prepare
+        run: |
+          mkdir -p cache/composer cache/vendor
+          make prepare
 
       - run: docker-compose pull
 
@@ -30,11 +32,15 @@ jobs:
           restore-keys: k0-docker-cache-
 
       - uses: actions/cache@v2
+        env:
+          cache-ver: v01
         with:
           path: ./cache
-          key: ${{ runner.os }}-composer-${{ hashFiles('**/composer.lock') }}
+          key: ${{ runner.os }}-${{ env.cache-ver }}-${{ hashFiles('**/composer.lock') }}
           restore-keys: |
-            ${{ runner.os }}-composer-
+            ${{ runner.os }}-${{ env.cache-ver }}-
 
       - name: install
-        run: make install
+        run: |
+          docker-compose -f docker-compose.yaml -f docker-compose.ci.yaml up -d
+          docker exec $(fpm-container-name) sh /scripts/install.sh
