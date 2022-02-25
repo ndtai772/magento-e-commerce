@@ -4,7 +4,10 @@ services:
   db:
     image: mysql:8
     container_name: db
-    env_file: docker/mysql/.env
+    environment:
+      - MYSQL_INITDB_SKIP_TZINFO=1
+      - MYSQL_ONETIME_PASSWORD=1
+    env_file: docker/.env
     # restart: always
     ports:
         - "3307:3306"
@@ -22,7 +25,7 @@ services:
       - ./magento_ecommerce:/var/www/html
 
   phpfpm:
-    env_file: .env
+    env_file: docker/.env
     build:
       context: ./docker/phpfpm
       args:

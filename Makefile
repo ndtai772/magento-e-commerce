@@ -8,7 +8,7 @@ init: prepare install
 
 prepare:
 	mkdir -p credentials && bash ./scripts/make_credentials.sh
-	sh ./scripts/id.sh > .env
+	bash ./scripts/generate_env.sh
 	mkdir -p cache/composer
 
 install:

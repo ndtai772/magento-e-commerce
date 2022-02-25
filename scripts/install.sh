@@ -6,7 +6,7 @@ chmod +x /scripts/wait-for-it.sh
 
 bash /scripts/wait-for-it.sh db:3306 -t 0
 
-bin/magento setup:install --db-host=db --db-name=magento_db --db-user=magento --db-password=magento --backend-frontname=admin
+bin/magento setup:install --db-host=db --db-name=$MYSQL_DATABASE --db-user=$MYSQL_USER --db-password=$MYSQL_PASSWORD --backend-frontname=admin
 
 bin/magento deploy:mode:set developer
 
