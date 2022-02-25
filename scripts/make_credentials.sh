@@ -19,4 +19,4 @@ echo "{
             \"password\": \"$PRIVATE_KEY\"
         }
     }
-}"
+}" > credentials/auth.json
