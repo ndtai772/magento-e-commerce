@@ -13,7 +13,7 @@ prepare:
 
 install:
 	docker-compose up -d
-	docker exec $(fpm-container-name) sh /install.sh
+	docker exec $(fpm-container-name) sh /scripts/install.sh
 
 exec:
 	docker exec -it $(fpm-container-name) bash
