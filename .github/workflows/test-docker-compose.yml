@@ -1,4 +1,4 @@
-name: test docker compose ci
+name: build docker compose
 
 on:
   push:

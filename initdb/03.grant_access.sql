@@ -1,1 +1,0 @@
-GRANT ALL ON magento_db.* TO 'magento'@'%';
