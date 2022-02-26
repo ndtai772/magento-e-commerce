@@ -131,7 +131,7 @@ CREATE TABLE `admin_user_session` (
   KEY `ADMIN_USER_SESSION_SESSION_ID` (`session_id`),
   KEY `ADMIN_USER_SESSION_USER_ID` (`user_id`),
   CONSTRAINT `ADMIN_USER_SESSION_USER_ID_ADMIN_USER_USER_ID` FOREIGN KEY (`user_id`) REFERENCES `admin_user` (`user_id`) ON DELETE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8mb3 COMMENT='Admin User sessions table';
+) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8mb3 COMMENT='Admin User sessions table';
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -697,8 +697,8 @@ CREATE TABLE `catalog_category_product_index_store1` (
   `store_id` smallint unsigned NOT NULL DEFAULT '0' COMMENT 'Store Id',
   `visibility` smallint unsigned NOT NULL COMMENT 'Visibility',
   PRIMARY KEY (`category_id`,`product_id`,`store_id`),
-  KEY `CAT_CTGR_PRD_IDX_STORE1_PRD_ID_STORE_ID_CTGR_ID_VISIBILITY` (`product_id`,`store_id`,`category_id`,`visibility`),
-  KEY `IDX_216E521C8AD125E066D2B0BAB4A08412` (`store_id`,`category_id`,`visibility`,`is_parent`,`position`)
+  KEY `IDX_4B965DC45C352D6E4C9DC0FF50B1FCF5` (`product_id`,`store_id`,`category_id`,`visibility`),
+  KEY `IDX_47AB760CD6A893ACEA69A9C2E0112C60` (`store_id`,`category_id`,`visibility`,`is_parent`,`position`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COMMENT='Catalog Category Product Index Store1';
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -717,8 +717,8 @@ CREATE TABLE `catalog_category_product_index_store1_replica` (
   `store_id` smallint unsigned NOT NULL DEFAULT '0' COMMENT 'Store Id',
   `visibility` smallint unsigned NOT NULL COMMENT 'Visibility',
   PRIMARY KEY (`category_id`,`product_id`,`store_id`),
-  KEY `IDX_4B965DC45C352D6E4C9DC0FF50B1FCF5` (`product_id`,`store_id`,`category_id`,`visibility`),
-  KEY `IDX_47AB760CD6A893ACEA69A9C2E0112C60` (`store_id`,`category_id`,`visibility`,`is_parent`,`position`)
+  KEY `CAT_CTGR_PRD_IDX_STORE1_PRD_ID_STORE_ID_CTGR_ID_VISIBILITY` (`product_id`,`store_id`,`category_id`,`visibility`),
+  KEY `IDX_216E521C8AD125E066D2B0BAB4A08412` (`store_id`,`category_id`,`visibility`,`is_parent`,`position`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COMMENT='Catalog Category Product Index Store1 Replica';
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -8747,42 +8747,6 @@ CREATE TABLE `tax_order_aggregated_updated` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Table structure for table `tfa_country_codes`
---
-
-DROP TABLE IF EXISTS `tfa_country_codes`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!50503 SET character_set_client = utf8mb4 */;
-CREATE TABLE `tfa_country_codes` (
-  `country_id` int unsigned NOT NULL AUTO_INCREMENT COMMENT 'TFA admin user ID',
-  `code` varchar(2) NOT NULL COMMENT 'Country code',
-  `name` varchar(255) NOT NULL COMMENT 'Country name',
-  `dial_code` varchar(255) NOT NULL COMMENT 'Prefix',
-  PRIMARY KEY (`country_id`),
-  KEY `TFA_COUNTRY_CODES_CODE` (`code`)
-) ENGINE=InnoDB AUTO_INCREMENT=242 DEFAULT CHARSET=utf8mb3 COMMENT='tfa_country_codes';
-/*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Table structure for table `tfa_user_config`
---
-
-DROP TABLE IF EXISTS `tfa_user_config`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!50503 SET character_set_client = utf8mb4 */;
-CREATE TABLE `tfa_user_config` (
-  `config_id` int unsigned NOT NULL AUTO_INCREMENT COMMENT 'TFA admin user ID',
-  `user_id` int unsigned NOT NULL COMMENT 'User ID',
-  `encoded_providers` text COMMENT 'Encoded providers list',
-  `encoded_config` text COMMENT 'Encoded providers configuration',
-  `default_provider` varchar(255) DEFAULT NULL COMMENT 'Default provider',
-  PRIMARY KEY (`config_id`),
-  KEY `TFA_USER_CONFIG_USER_ID_ADMIN_USER_USER_ID` (`user_id`),
-  CONSTRAINT `TFA_USER_CONFIG_USER_ID_ADMIN_USER_USER_ID` FOREIGN KEY (`user_id`) REFERENCES `admin_user` (`user_id`) ON DELETE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COMMENT='tfa_user_config';
-/*!40101 SET character_set_client = @saved_cs_client */;
-
---
 -- Table structure for table `theme`
 --
 
@@ -8864,7 +8828,7 @@ CREATE TABLE `ui_bookmark` (
   PRIMARY KEY (`bookmark_id`),
   KEY `UI_BOOKMARK_USER_ID_NAMESPACE_IDENTIFIER` (`user_id`,`namespace`,`identifier`),
   CONSTRAINT `UI_BOOKMARK_USER_ID_ADMIN_USER_USER_ID` FOREIGN KEY (`user_id`) REFERENCES `admin_user` (`user_id`) ON DELETE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COMMENT='Bookmark';
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb3 COMMENT='Bookmark';
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
