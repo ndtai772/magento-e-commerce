@@ -10,6 +10,8 @@ bin/magento setup:install --db-host=db --db-name=$MYSQL_DATABASE --db-user=$MYSQ
 
 bin/magento deploy:mode:set developer
 
+bin/magento config:set system/backup/functionality_enabled 1
+
 bin/magento module:disable Magento_TwoFactorAuth
 
 bin/magento indexer:reindex

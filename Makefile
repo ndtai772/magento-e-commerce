@@ -1,5 +1,4 @@
 fpm-container-name := 'phpfpm'
-db-container-name := 'db'
 
 all:
 	@echo "hello!"
@@ -31,10 +30,8 @@ clear:
 	# docker image prune -f
 
 backup:
-	@echo "--dumping schema"
-	docker exec $(db-container-name) mysqldump -umagento -pmagento --no-tablespaces --no-data --skip-dump-date  magento_db > ./initdb/01.schema.sql
-	@echo -e "--finish dumping schema\n"
+	@echo "--dumping database"
+	docker exec $(fpm-container-name) bin/magento setup:backup --db
 
-	@echo "--dumping data"
-	docker exec $(db-container-name) mysqldump -umagento -pmagento --no-tablespaces --no-create-info --skip-triggers --skip-dump-date magento_db > ./initdb/02.data.sql
-	@echo -e "--finish dumping data\n"
+	@echo "move db backup file to initdb"
+	mv magento_ecommerce/var/backups/*.sql ./initdb/dump.sql
