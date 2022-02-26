@@ -24,7 +24,6 @@ jobs:
 
       - uses: whoan/docker-build-with-cache-action@v5
         with:
-          registry: ghcr.io
           compose_file: docker-compose.yaml > docker/docker-compose.ci.yaml
 
       - name: cache composer registry
