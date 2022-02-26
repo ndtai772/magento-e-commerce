@@ -3,6 +3,9 @@ if test -f "docker/.env"; then
     exit 0
 fi
 
+rm -f magento_ecommerce/app/etc/env.php
+rm -f magento_ecommerce/app/etc/config.php
+
 if [ "$CI" == "true" ]; then
     MYSQL_USER="magento"
     MYSQL_PASSWORD="magento"
