@@ -19,7 +19,7 @@ jobs:
           PUBLIC_KEY: ${{secrets.PUBLIC_KEY}}
           PRIVATE_KEY: ${{secrets.PRIVATE_KEY}}
         run: |
-          mkdir -p cache/composer cache/vendor
+          mkdir -p cache/composer
           make prepare
 
       - run: docker-compose pull
@@ -31,14 +31,27 @@ jobs:
           key: k1-docker-cache-{hash}
           restore-keys: k1-docker-cache-
 
-      - uses: actions/cache@v2
+      - name: cache composer registry
+        uses: actions/cache@v2
         env:
-          cache-ver: v01
+          cache-name: composer-registry-v01
         with:
-          path: ./cache
-          key: ${{ runner.os }}-${{ env.cache-ver }}-${{ hashFiles('**/composer.lock') }}
+          path: ./cache/composer
+          key: ${{ runner.os }}-${{ env.cache-name }}-${{ hashFiles('**/composer.lock') }}
           restore-keys: |
-            ${{ runner.os }}-${{ env.cache-ver }}-
+            ${{ runner.os }}-${{ env.cache-name }}-
+            ${{ runner.os }}-
+
+      - name: cache composer build
+        uses: actions/cache@v2
+        env:
+          cache-name: composer-build-v01
+        with:
+          path: ./magento_ecommerce/vendor
+          key: ${{ runner.os }}-${{ env.cache-name }}-${{ hashFiles('**/composer.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-${{ env.cache-name }}-
+            ${{ runner.os }}-
 
       - name: compose up
         run: docker-compose -f docker-compose.yaml -f docker/docker-compose.ci.yaml up -d
