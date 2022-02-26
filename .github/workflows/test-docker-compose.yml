@@ -22,8 +22,6 @@ jobs:
           mkdir -p cache/composer
           make prepare
 
-      - run: docker-compose pull
-
       - uses: whoan/docker-build-with-cache-action@v5
         with:
           registry: ghcr.io
