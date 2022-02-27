@@ -5,3 +5,4 @@ services:
   phpfpm:
     volumes:
       - ./cache/composer:/var/www/.composer/cache
+      - ./credentials/auth.json:/var/www/html/auth.json
