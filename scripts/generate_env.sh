@@ -10,10 +10,12 @@ if [ "$CI" == "true" ]; then
     MYSQL_USER="magento"
     MYSQL_PASSWORD="magento"
     MYSQL_DATABASE="magento_db"
+    MYSQL_HOST="localhost"
 else
     read -p "mysql username: " MYSQL_USER
     read -p "mysql password: " MYSQL_PASSWORD
     read -p "mysql database: " MYSQL_DATABASE
+    MYSQL_HOST="db"
 fi
 
 echo "# MYSQL

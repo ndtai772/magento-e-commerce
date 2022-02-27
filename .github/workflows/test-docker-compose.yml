@@ -22,7 +22,13 @@ jobs:
           mkdir -p cache/composer
           make prepare
 
-      - run: docker-compose up -d db
+      - name: create database with sql file
+        run: |
+          sudo systemctl start mysql.services
+          mysql -h 127.0.0.1 -uroot -proot -e "CREATE USER 'magento'@'%' IDENTIFIED BY 'magento';"
+          mysql -h 127.0.0.1 -uroot -proot -e "CREATE DATABASE magento_db;"
+          mysql -h 127.0.0.1 -uroot -proot -e "GRANT ALL ON magento_db.* TO 'magento'@'%';"
+          mysql -h 127.0.0.1 -umagento -pmagento magento_db < initdb/dump.sql &
 
       - run: docker-compose pull
 
@@ -60,6 +66,6 @@ jobs:
 
       - name: install magento
         run: docker exec 'phpfpm' sh /scripts/install.sh
-      
+
       - name: perf debug -- db logs
         run: docker-compose logs -t db
