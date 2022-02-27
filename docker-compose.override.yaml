@@ -1,18 +1,26 @@
-version: '3.8'
+version: "3.8"
 
 services:
   db:
     image: mysql:8
     container_name: db
     cap_add:
-        - SYS_NICE # CAP_SYS_NICE
+      - SYS_NICE # CAP_SYS_NICE
     environment:
       - MYSQL_INITDB_SKIP_TZINFO=1
       - MYSQL_ROOT_PASSWORD=root
     env_file: .env
     # restart: always
     ports:
-        - "3307:3306"
+      - "3307:3306"
     volumes:
       - ./initdb:/docker-entrypoint-initdb.d
       # - ./database:/var/lib/mysql
+
+  phpfpm:
+    env_file: .env
+
+  elasticsearch:
+    ports:
+      - "9200:9200"
+      - "9300:9300"
