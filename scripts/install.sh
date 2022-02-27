@@ -15,7 +15,7 @@ bin/magento setup:install \
     --db-password=$MYSQL_PASSWORD \
     --backend-frontname=admin \
     --search-engine=elasticsearch7 \
-    --elasticsearch-host=elasticsearch \
+    --elasticsearch-host=$ELASTICSEARCH_HOST \
     --elasticsearch-port=9200
 
 bin/magento deploy:mode:set developer
