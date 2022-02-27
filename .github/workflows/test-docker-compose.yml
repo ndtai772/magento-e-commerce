@@ -22,14 +22,22 @@ jobs:
           mkdir -p cache/composer
           make prepare
 
-      - run: docker-compose pull
+      - name: create database with sql file
+        run: |
+          sudo systemctl start mysql.service
+          mysql -h 127.0.0.1 -uroot -proot -e "CREATE USER 'magento'@'%' IDENTIFIED BY 'magento';"
+          mysql -h 127.0.0.1 -uroot -proot -e "CREATE DATABASE magento_db;"
+          mysql -h 127.0.0.1 -uroot -proot -e "GRANT ALL ON magento_db.* TO 'magento'@'%';"
+          mysql -h 127.0.0.1 -umagento -pmagento magento_db < initdb/dump.sql &
+
+      - run: docker-compose -f docker-compose.yaml pull
 
       - uses: satackey/action-docker-layer-caching@v0.0.11
         continue-on-error: true
         with:
           concurrency: true
-          key: k1-docker-cache-{hash}
-          restore-keys: k1-docker-cache-
+          key: k2-docker-cache-{hash}
+          restore-keys: k2-docker-cache-
 
       - name: cache composer registry
         uses: actions/cache@v2
@@ -58,3 +66,6 @@ jobs:
 
       - name: install magento
         run: docker exec 'phpfpm' sh /scripts/install.sh
+
+      - name: perf debug -- db logs
+        run: docker-compose logs -t db

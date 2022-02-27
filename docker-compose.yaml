@@ -1,23 +1,6 @@
 version: '3.8'
 
 services:
-  db:
-    image: mysql:8
-    container_name: db
-    cap_add:
-        - SYS_NICE # CAP_SYS_NICE
-    environment:
-      - MYSQL_INITDB_SKIP_TZINFO=1
-      - MYSQL_ONETIME_PASSWORD=1
-      - MYSQL_RANDOM_ROOT_PASSWORD=1
-    env_file: .env
-    # restart: always
-    ports:
-        - "3307:3306"
-    volumes:
-      - ./initdb:/docker-entrypoint-initdb.d
-      # - ./database:/var/lib/mysql
-
   web-server:
     image: nginx:1.21
     container_name: web-server
@@ -28,7 +11,6 @@ services:
       - ./magento_ecommerce:/var/www/html
 
   phpfpm:
-    env_file: .env
     build:
       context: ./docker/phpfpm
       args:
@@ -41,11 +23,11 @@ services:
       - ./scripts:/scripts
 
   elasticsearch:
+    ports:
+    - "9200:9200"
+    - "9300:9300"
     # original: https://github.com/markshust/docker-magento/blob/master/compose/docker-compose.yml
     image: markoshust/magento-elasticsearch:7.9.3-1
-    ports:
-      - "9200:9200"
-      - "9300:9300"
     environment:
       - "discovery.type=single-node"
       ## Set custom heap size to avoid memory errors
