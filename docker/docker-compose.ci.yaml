@@ -7,8 +7,8 @@ services:
       - MYSQL_USER=magento
       - MYSQL_PASSWORD="magento"
       - MYSQL_DATABASE="magento_db"
-      - MYSQL_HOST="127.0.0.1"
-      - ELASTICSEARCH_HOST="127.0.0.1"
+      - MYSQL_HOST=127.0.0.1
+      - ELASTICSEARCH_HOST=127.0.0.1
 
     volumes:
       - ./cache/composer:/var/www/.composer/cache
