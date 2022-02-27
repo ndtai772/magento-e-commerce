@@ -4,7 +4,7 @@ composer install
 
 chmod +x /scripts/wait-for-it.sh
 
-bash /scripts/wait-for-it.sh $MYSQL_HOST:3306 -t 0
+bash -c "/scripts/wait-for-it.sh $MYSQL_HOST:3306 -t 0"
 
 bin/magento setup:install \
     --db-host=$MYSQL_HOST \
