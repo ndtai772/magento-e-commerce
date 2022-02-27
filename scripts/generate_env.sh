@@ -15,7 +15,7 @@ else
     read -p "mysql username: " MYSQL_USER
     read -p "mysql password: " MYSQL_PASSWORD
     read -p "mysql database: " MYSQL_DATABASE
-    MYSQL_HOST="db"
+    MYSQL_HOST="127.0.0.1"
 fi
 
 echo "# MYSQL

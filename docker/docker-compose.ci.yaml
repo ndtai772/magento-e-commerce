@@ -8,3 +8,4 @@ services:
       - ./credentials/auth.json:/var/www/html/auth.json
     extra_hosts:
     - "host.docker.internal:host-gateway"
+    network_mode: host
