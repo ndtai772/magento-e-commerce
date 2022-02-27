@@ -24,7 +24,7 @@ jobs:
 
       - run: docker-compose pull
 
-      - run: dokcer-compose up -d db
+      - run: docker-compose up -d db
 
       - uses: satackey/action-docker-layer-caching@v0.0.11
         continue-on-error: true
