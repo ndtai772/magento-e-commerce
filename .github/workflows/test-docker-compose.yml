@@ -37,7 +37,7 @@ jobs:
         with:
           concurrency: true
           key: k2-docker-cache-{hash}
-          restore-keys: k1-docker-cache-
+          restore-keys: k2-docker-cache-
 
       - name: cache composer registry
         uses: actions/cache@v2
