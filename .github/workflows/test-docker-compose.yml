@@ -58,3 +58,6 @@ jobs:
 
       - name: install magento
         run: docker exec 'phpfpm' sh /scripts/install.sh
+      
+      - name: perf debug -- db logs
+        run: docker-compose logs db -t
