@@ -30,7 +30,7 @@ jobs:
           mysql -h 127.0.0.1 -uroot -proot -e "GRANT ALL ON magento_db.* TO 'magento'@'%';"
           mysql -h 127.0.0.1 -umagento -pmagento magento_db < initdb/dump.sql &
 
-      - run: docker-compose pull
+      - run: docker-compose -f docker-compose.yaml pull
 
       - uses: satackey/action-docker-layer-caching@v0.0.11
         continue-on-error: true
