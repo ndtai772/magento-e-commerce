@@ -8,8 +8,7 @@ services:
         - SYS_NICE # CAP_SYS_NICE
     environment:
       - MYSQL_INITDB_SKIP_TZINFO=1
-      - MYSQL_ONETIME_PASSWORD=1
-      - MYSQL_RANDOM_ROOT_PASSWORD=1
+      - MYSQL_ROOT_PASSWORD=root
     env_file: .env
     # restart: always
     ports:
