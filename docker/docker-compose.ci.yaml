@@ -6,3 +6,5 @@ services:
     volumes:
       - ./cache/composer:/var/www/.composer/cache
       - ./credentials/auth.json:/var/www/html/auth.json
+    extra_hosts:
+    - "host.docker.internal:host-gateway"
