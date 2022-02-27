@@ -23,6 +23,9 @@ services:
       - ./scripts:/scripts
 
   elasticsearch:
+    ports:
+    - "9200:9200"
+    - "9300:9300"
     # original: https://github.com/markshust/docker-magento/blob/master/compose/docker-compose.yml
     image: markoshust/magento-elasticsearch:7.9.3-1
     environment:

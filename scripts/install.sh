@@ -4,7 +4,7 @@ composer install
 
 chmod +x /scripts/wait-for-it.sh
 
-echo $MYSQL_HOST
+echo $ELASTICSEARCH_HOST
 
 bash /scripts/wait-for-it.sh $MYSQL_HOST:3306 -t 0
 

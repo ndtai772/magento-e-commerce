@@ -19,8 +19,3 @@ services:
 
   phpfpm:
     env_file: .env
-
-  elasticsearch:
-    ports:
-      - "9200:9200"
-      - "9300:9300"

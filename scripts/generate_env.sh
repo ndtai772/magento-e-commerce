@@ -7,7 +7,12 @@ rm -f magento_ecommerce/app/etc/env.php
 rm -f magento_ecommerce/app/etc/config.php
 
 if [ "$CI" == "true" ]; then
-    exit 0
+
+echo "# PHPFPM
+UID=$(id -u $(whoami))
+GID=$(id -g $(whoami))" > .env
+
+exit 0
 fi
 
 read -p "mysql username: " MYSQL_USER
