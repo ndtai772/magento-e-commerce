@@ -4,8 +4,8 @@ version: "3.8"
 services:
   phpfpm:
     environment:
-      - MYSQL_HOST=127.0.0.1
-      - ELASTICSEARCH_HOST=127.0.0.1
+      - MYSQL_HOST=host.docker.internal
     volumes:
       - ./cache/composer:/var/www/.composer/cache
-    network_mode: host
+    extra_hosts:
+        - "host.docker.internal:host-gateway"
