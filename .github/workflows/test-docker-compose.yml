@@ -62,3 +62,6 @@ jobs:
 
       - name: compose up
         run: docker-compose -f docker-compose.yaml -f docker/docker-compose.ci.yaml up -d
+
+      - name: basic test
+        run: curl localhost:8080
