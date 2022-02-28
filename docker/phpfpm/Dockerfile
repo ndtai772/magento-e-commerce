@@ -58,8 +58,8 @@ RUN mv "$PHP_INI_DIR/php.ini-development" "$PHP_INI_DIR/php.ini"
 
 COPY ./conf.ini "$PHP_INI_DIR/conf.d/"
 
-ARG GID
-ARG UID
+ARG GID=1000
+ARG UID=1000
 
 RUN groupadd -g "$GID" app && useradd -g "$GID" -u "$UID" -d /var/www -s /bin/bash app
 
