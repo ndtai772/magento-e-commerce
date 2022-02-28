@@ -16,6 +16,3 @@ services:
     volumes:
       - ./initdb:/docker-entrypoint-initdb.d
       # - ./database:/var/lib/mysql
-
-  phpfpm:
-    env_file: .env

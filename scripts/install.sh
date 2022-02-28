@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 
 composer install
 
@@ -16,12 +16,9 @@ bin/magento setup:install \
     --db-password=$MYSQL_PASSWORD \
     --backend-frontname=admin \
     --search-engine=elasticsearch7 \
-    --elasticsearch-host=$ELASTICSEARCH_HOST \
-    --elasticsearch-port=9200
+    --elasticsearch-host=$ELASTICSEARCH_HOST
 
 bin/magento deploy:mode:set developer
-
-bin/magento config:set system/backup/functionality_enabled 1
 
 bin/magento module:disable Magento_TwoFactorAuth
 

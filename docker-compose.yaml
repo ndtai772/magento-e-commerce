@@ -11,6 +11,7 @@ services:
       - ./magento_ecommerce:/var/www/html
 
   phpfpm:
+    env_file: .env
     build:
       context: ./docker/phpfpm
       args:
@@ -21,6 +22,8 @@ services:
       - ./magento_ecommerce:/var/www/html
       - ./credentials/auth.json:/var/www/.composer/auth.json
       - ./scripts:/scripts
+    command: |
+      bash /scripts/install.sh
 
   elasticsearch:
     ports:
