@@ -6,7 +6,7 @@ init: prepare install
 prepare:
 	mkdir -p credentials && bash ./scripts/make_credentials.sh
 	cp credentials/auth.json magento_ecommerce
-	bash ./scripts/generate_env.sh
+	bash ./scripts/gen_dev_env.sh
 
 install:
 	docker-compose up -d
