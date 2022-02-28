@@ -28,15 +28,17 @@ jobs:
           mysql -h 127.0.0.1 -uroot -proot -e "CREATE USER 'magento'@'%' IDENTIFIED BY 'magento';"
           mysql -h 127.0.0.1 -uroot -proot -e "CREATE DATABASE ecom;"
           mysql -h 127.0.0.1 -uroot -proot -e "GRANT ALL ON ecom.* TO 'magento'@'%';"
+          mysql -h 127.0.0.1 -umagento -pmagento ecom < ./initdb/01.schema.sql
+          mysql -h 127.0.0.1 -umagento -pmagento ecom < ./initdb/02.data.sql
 
       - run: docker-compose -f docker-compose.yaml pull
 
-      - uses: satackey/action-docker-layer-caching@v0.0.11
-        continue-on-error: true
-        with:
-          concurrency: true
-          key: k3-docker-cache-{hash}
-          restore-keys: k3-docker-cache-
+      # - uses: satackey/action-docker-layer-caching@v0.0.11
+      #   continue-on-error: true
+      #   with:
+      #     concurrency: true
+      #     key: k3-docker-cache-{hash}
+      #     restore-keys: k3-docker-cache-
 
       - name: cache composer registry
         uses: actions/cache@v2
@@ -64,4 +66,6 @@ jobs:
         run: docker-compose -f docker-compose.yaml -f docker/docker-compose.ci.yaml up -d
 
       - name: basic test
-        run: curl localhost:8080
+        run: |
+          bash ./scripts/wait-for-it.sh localhost:8080
+          curl localhost:8080
