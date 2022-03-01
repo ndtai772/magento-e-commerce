@@ -3,15 +3,9 @@ version: "3.8"
 
 services:
   phpfpm:
-    env_file: .env
     environment:
-      - MYSQL_USER=magento
-      - MYSQL_PASSWORD=magento
-      - MYSQL_DATABASE=magento_db
-      - MYSQL_HOST=127.0.0.1
-      - ELASTICSEARCH_HOST=127.0.0.1
-
+      - MYSQL_HOST=host.docker.internal
     volumes:
       - ./cache/composer:/var/www/.composer/cache
-      - ./credentials/auth.json:/var/www/html/auth.json
-    network_mode: host
+    extra_hosts:
+        - "host.docker.internal:host-gateway"

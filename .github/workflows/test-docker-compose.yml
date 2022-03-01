@@ -26,8 +26,10 @@ jobs:
         run: |
           sudo systemctl start mysql.service
           mysql -h 127.0.0.1 -uroot -proot -e "CREATE USER 'magento'@'%' IDENTIFIED BY 'magento';"
-          mysql -h 127.0.0.1 -uroot -proot -e "CREATE DATABASE magento_db;"
-          mysql -h 127.0.0.1 -uroot -proot -e "GRANT ALL ON magento_db.* TO 'magento'@'%';"
+          mysql -h 127.0.0.1 -uroot -proot -e "CREATE DATABASE ecom;"
+          mysql -h 127.0.0.1 -uroot -proot -e "GRANT ALL ON ecom.* TO 'magento'@'%';"
+          mysql -h 127.0.0.1 -umagento -pmagento ecom < ./initdb/01.schema.sql
+          mysql -h 127.0.0.1 -umagento -pmagento ecom < ./initdb/02.data.sql
 
       - run: docker-compose -f docker-compose.yaml pull
 
@@ -35,8 +37,8 @@ jobs:
         continue-on-error: true
         with:
           concurrency: true
-          key: k2-docker-cache-{hash}
-          restore-keys: k2-docker-cache-
+          key: docker-cache-${{ hashFiles('**/docker-compose.*', '**/Dockerfile') }}-{hash}
+          restore-keys: docker-cache-${{ hashFiles('**/docker-compose.*', '**/Dockerfile') }}
 
       - name: cache composer registry
         uses: actions/cache@v2
@@ -64,4 +66,15 @@ jobs:
         run: docker-compose -f docker-compose.yaml -f docker/docker-compose.ci.yaml up -d
 
       - name: install magento
-        run: docker exec 'phpfpm' sh /scripts/install.sh
+        run: docker exec phpfpm bash /scripts/install.sh
+      
+      - name: docker-compose logs
+        run: |
+          docker ps -a
+          docker-compose logs phpfpm
+          docker-compose logs web-server
+
+      - name: basic test
+        run: |
+          bash ./scripts/wait-for-it.sh localhost:8080 -t 0
+          curl -s localhost:8080
