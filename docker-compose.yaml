@@ -21,7 +21,7 @@ services:
     volumes:
       - ./magento_ecommerce:/var/www/html
       - ./scripts:/scripts
-    command: bash /scripts/install.sh
+    # command: bash /scripts/install.sh
 
   elasticsearch:
     ports:

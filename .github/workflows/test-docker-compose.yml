@@ -64,6 +64,9 @@ jobs:
 
       - name: compose up
         run: docker-compose -f docker-compose.yaml -f docker/docker-compose.ci.yaml up -d
+
+      - name: install magento
+        run: docker exec phpfpm bash /scripts/install.sh
       
       - name: docker-compose logs
         run: |
@@ -74,4 +77,4 @@ jobs:
       - name: basic test
         run: |
           bash ./scripts/wait-for-it.sh localhost:8080 -t 0
-          curl localhost:8080
+          curl -s localhost:8080
