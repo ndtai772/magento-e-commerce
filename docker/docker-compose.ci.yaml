@@ -1,5 +1,5 @@
 # Custom docker-compose to speed up ci (github action)
-version: "3.8"
+version: "3.7"
 
 services:
   phpfpm:
