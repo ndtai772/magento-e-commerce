@@ -163,8 +163,6 @@ class DynamicBundlePriceCalculatorWithDimensionTest extends BundlePriceAbstract
                     [
                         'sku' => 'simple1',
                         'qty' => 1,
-                        'price' => 100,
-                        'price_type' => 0,
                     ],
                 ]
             ],
@@ -194,20 +192,14 @@ class DynamicBundlePriceCalculatorWithDimensionTest extends BundlePriceAbstract
                     [
                         'sku' => 'simple1',
                         'qty' => 3,
-                        'price' => 100,
-                        'price_type' => 0,
                     ],
                     [
                         'sku' => 'simple2',
                         'qty' => 2,
-                        'price' => 100,
-                        'price_type' => 0,
                     ],
                     [
                         'sku' => 'simple3',
                         'qty' => 1,
-                        'price' => 100,
-                        'price_type' => 0,
                     ],
                 ]
             ]
@@ -237,20 +229,14 @@ class DynamicBundlePriceCalculatorWithDimensionTest extends BundlePriceAbstract
                     [
                         'sku' => 'simple1',
                         'qty' => 1,
-                        'price' => 100,
-                        'price_type' => 0,
                     ],
                     [
                         'sku' => 'simple2',
                         'qty' => 1,
-                        'price' => 100,
-                        'price_type' => 0,
                     ],
                     [
                         'sku' => 'simple3',
                         'qty' => 1,
-                        'price' => 100,
-                        'price_type' => 0,
                     ]
                 ]
             ]
@@ -279,14 +265,10 @@ class DynamicBundlePriceCalculatorWithDimensionTest extends BundlePriceAbstract
                     [
                         'sku' => 'simple1',
                         'qty' => 1,
-                        'price' => 100,
-                        'price_type' => 0,
                     ],
                     [
                         'sku' => 'simple2',
                         'qty' => 3,
-                        'price' => 100,
-                        'price_type' => 0,
                     ],
                 ]
             ],
@@ -298,14 +280,10 @@ class DynamicBundlePriceCalculatorWithDimensionTest extends BundlePriceAbstract
                     [
                         'sku' => 'simple1',
                         'qty' => 1,
-                        'price' => 100,
-                        'price_type' => 0,
                     ],
                     [
                         'sku' => 'simple2',
                         'qty' => 3,
-                        'price' => 100,
-                        'price_type' => 0,
                     ],
                 ]
             ]
@@ -334,14 +312,10 @@ class DynamicBundlePriceCalculatorWithDimensionTest extends BundlePriceAbstract
                     [
                         'sku' => 'simple1',
                         'qty' => 1,
-                        'price' => 100,
-                        'price_type' => 0,
                     ],
                     [
                         'sku' => 'simple2',
                         'qty' => 3,
-                        'price' => 100,
-                        'price_type' => 0,
                     ],
                 ]
             ],
@@ -353,14 +327,10 @@ class DynamicBundlePriceCalculatorWithDimensionTest extends BundlePriceAbstract
                     [
                         'sku' => 'simple1',
                         'qty' => 1,
-                        'price' => 100,
-                        'price_type' => 0,
                     ],
                     [
                         'sku' => 'simple2',
                         'qty' => 3,
-                        'price' => 100,
-                        'price_type' => 0,
                     ],
                 ]
             ]

@@ -24,6 +24,7 @@ class CountryofmanufactureTest extends \PHPUnit\Framework\TestCase
 
     public function testGetAllOptions()
     {
+        CacheCleaner::cleanAll();
         $allOptions = $this->model->getAllOptions();
         $cachedAllOptions = $this->model->getAllOptions();
         $this->assertEquals($allOptions, $cachedAllOptions);

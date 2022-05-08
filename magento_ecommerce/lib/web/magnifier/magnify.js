@@ -35,11 +35,14 @@ define([
             allowZoomOut = false,
             allowZoomIn = true;
 
-        transitionEnabled = document.documentElement.style.transition !== undefined ||
-            document.documentElement.style.WebkitTransition !== undefined ||
-            document.documentElement.style.MozTransition !== undefined ||
-            document.documentElement.style.MsTransition !== undefined ||
-            document.documentElement.style.OTransition !== undefined;
+        (function () {
+            var style = document.documentElement.style,
+                transitionEnabled = style.transition !== undefined ||
+                style.WebkitTransition !== undefined ||
+                style.MozTransition !== undefined ||
+                style.MsTransition !== undefined ||
+                style.OTransition !== undefined;
+        })();
 
         /**
          * Return width and height of original image
@@ -652,7 +655,7 @@ define([
                     }
                 });
             } else {
-                $image.off('dblclick');
+                $image.unbind('dblclick');
                 $image.dblclick(dblClickHandler);
             }
 
@@ -746,7 +749,7 @@ define([
             });
 
             if (keyboardNavigation) {
-                $(document).off('keydown', keyboardNavigation);
+                $(document).unbind('keydown', keyboardNavigation);
             }
 
             /**

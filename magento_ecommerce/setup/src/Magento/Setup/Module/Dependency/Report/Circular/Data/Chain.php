@@ -11,11 +11,6 @@ namespace Magento\Setup\Module\Dependency\Report\Circular\Data;
 class Chain
 {
     /**
-     * @var array
-     */
-    private $modules;
-
-    /**
      * Chain construct
      *
      * @param array $modules

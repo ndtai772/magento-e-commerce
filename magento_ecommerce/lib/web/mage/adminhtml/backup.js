@@ -70,12 +70,13 @@ define([
          * request backup options.
          */
         requestBackupOptions: function () {
+            var action;
+
             this.hidePopups();
+            action = this.type != 'snapshot' ? 'hide' : 'show'; //eslint-disable-line eqeqeq
             this.showPopup('backup-options');
 
-            if (this.type === 'snapshot') {
-                jQuery('#exclude-media-checkbox-container').removeClass('no-display');
-            }
+            $$('#exclude-media-checkbox-container').invoke(action);
         },
 
         /**

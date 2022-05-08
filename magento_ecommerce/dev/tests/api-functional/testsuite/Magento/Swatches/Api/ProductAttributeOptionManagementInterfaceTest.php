@@ -12,7 +12,6 @@ use Magento\Catalog\Model\ResourceModel\Eav\Attribute;
 use Magento\Eav\Api\Data\AttributeOptionInterface;
 use Magento\Eav\Api\Data\AttributeOptionLabelInterface;
 use Magento\Eav\Model\AttributeRepository;
-use Magento\Framework\DataObject;
 use Magento\Framework\Webapi\Rest\Request;
 use Magento\Swatches\Model\ResourceModel\Swatch\Collection;
 use Magento\Swatches\Model\ResourceModel\Swatch\CollectionFactory;
@@ -26,7 +25,6 @@ use Magento\TestFramework\TestCase\WebapiAbstract;
 class ProductAttributeOptionManagementInterfaceTest extends WebapiAbstract
 {
     private const ATTRIBUTE_CODE = 'select_attribute';
-    private const SERVICE_NAME_UPDATE = 'catalogProductAttributeOptionUpdateV1';
     private const SERVICE_NAME = 'catalogProductAttributeOptionManagementV1';
     private const SERVICE_VERSION = 'V1';
     private const RESOURCE_PATH = '/V1/products/attributes';
@@ -34,7 +32,6 @@ class ProductAttributeOptionManagementInterfaceTest extends WebapiAbstract
     /**
      * Test add option to swatch attribute
      *
-     * @dataProvider addDataProvider
      * @magentoApiDataFixture Magento/Catalog/Model/Product/Attribute/_files/select_attribute.php
      * @param array $data
      * @param array $payload
@@ -42,7 +39,7 @@ class ProductAttributeOptionManagementInterfaceTest extends WebapiAbstract
      * @param string $expectedLabel
      * @param string $expectedValue
      *
-     * @return void
+     * @dataProvider addDataProvider
      */
     public function testAdd(
         array $data,
@@ -50,7 +47,7 @@ class ProductAttributeOptionManagementInterfaceTest extends WebapiAbstract
         int $expectedSwatchType,
         string $expectedLabel,
         string $expectedValue
-    ): void {
+    ) {
         $objectManager = Bootstrap::getObjectManager();
         /** @var $attributeRepository AttributeRepository */
         $attributeRepository = $objectManager->get(AttributeRepository::class);
@@ -77,7 +74,7 @@ class ProductAttributeOptionManagementInterfaceTest extends WebapiAbstract
         );
 
         $this->assertNotNull($response);
-        $optionId = (int)ltrim($response, 'id_');
+        $optionId = (int) ltrim($response, 'id_');
         $swatch = $this->getSwatch($optionId);
         $this->assertEquals($expectedValue, $swatch->getValue());
         $this->assertEquals($expectedSwatchType, $swatch->getType());
@@ -87,46 +84,10 @@ class ProductAttributeOptionManagementInterfaceTest extends WebapiAbstract
     }
 
     /**
-     * @magentoApiDataFixture Magento/Swatches/_files/text_swatch_attribute.php
-     * @return void
-     */
-    public function testUpdate(): void
-    {
-        $testAttributeCode = 'test_configurable';
-        $optionData = [
-            AttributeOptionInterface::LABEL => 'Fixture Option Changed',
-            AttributeOptionInterface::VALUE => 'option_value',
-        ];
-
-        $existOptionLabel = 'option 1';
-        $existAttributeOption = $this->getAttributeOption($testAttributeCode, $existOptionLabel);
-        $optionId = $existAttributeOption['value'];
-
-        $response = $this->webApiCallAttributeOptions(
-            $testAttributeCode,
-            Request::HTTP_METHOD_PUT,
-            'update',
-            [
-                'attributeCode' => $testAttributeCode,
-                'optionId' => $optionId,
-                'option' => $optionData,
-            ],
-            $optionId
-        );
-        $this->assertTrue($response);
-        $this->assertNotNull(
-            $this->getAttributeOption(
-                $testAttributeCode,
-                $optionData[AttributeOptionInterface::LABEL]
-            )
-        );
-    }
-
-    /**
      * @return array
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
-    public function addDataProvider(): array
+    public function addDataProvider()
     {
         return [
             'visual swatch option with value' => [
@@ -251,99 +212,14 @@ class ProductAttributeOptionManagementInterfaceTest extends WebapiAbstract
      * Get swatch model
      *
      * @param int $optionId
-     * @return DataObject
+     * @return Swatch
      */
-    private function getSwatch(int $optionId): DataObject
+    private function getSwatch(int $optionId)
     {
         /** @var Collection $collection */
         $collection = Bootstrap::getObjectManager()->get(CollectionFactory::class)->create();
         $collection->addFieldToFilter('option_id', $optionId);
         $collection->setPageSize(1);
-
         return $collection->getFirstItem();
-    }
-
-    /**
-     * Perform Web API call to the system under test
-     *
-     * @param string $attributeCode
-     * @param string $httpMethod
-     * @param string $soapMethod
-     * @param array $arguments
-     * @param null $storeCode
-     * @param null $optionId
-     * @return array|bool|float|int|string
-     */
-    private function webApiCallAttributeOptions(
-        string $attributeCode,
-        string $httpMethod,
-        string $soapMethod,
-        array $arguments = [],
-        $optionId = null,
-        $storeCode = null
-    ) {
-        $resourcePath = self::RESOURCE_PATH . "/{$attributeCode}/options";
-        if ($optionId) {
-            $resourcePath .= '/' . $optionId;
-        }
-        $serviceName = $soapMethod === 'update' ? self::SERVICE_NAME_UPDATE : self::SERVICE_NAME;
-        $serviceInfo = [
-            'rest' => [
-                'resourcePath' => $resourcePath,
-                'httpMethod' => $httpMethod,
-            ],
-            'soap' => [
-                'service' => $serviceName,
-                'serviceVersion' => self::SERVICE_VERSION,
-                'operation' => $serviceName . $soapMethod,
-            ],
-        ];
-
-        return $this->_webApiCall($serviceInfo, $arguments, null, $storeCode);
-    }
-
-    /**
-     * Get Attribute options by attribute code
-     *
-     * @param string $testAttributeCode
-     * @param string|null $storeCode
-     * @return array|bool|float|int|string
-     */
-    private function getAttributeOptions(string $testAttributeCode, ?string $storeCode = null)
-    {
-        return $this->webApiCallAttributeOptions(
-            $testAttributeCode,
-            Request::HTTP_METHOD_GET,
-            'getItems',
-            ['attributeCode' => $testAttributeCode],
-            null,
-            $storeCode
-        );
-    }
-
-    /**
-     * Get Attribute option by attribute code
-     *
-     * @param string $attributeCode
-     * @param string $optionLabel
-     * @param string|null $storeCode
-     * @return array|null
-     */
-    private function getAttributeOption(
-        string $attributeCode,
-        string $optionLabel,
-        ?string $storeCode = null
-    ): ?array {
-        $attributeOptions = $this->getAttributeOptions($attributeCode, $storeCode);
-        $option = null;
-        /** @var array $attributeOption */
-        foreach ($attributeOptions as $attributeOption) {
-            if ($attributeOption['label'] === $optionLabel) {
-                $option = $attributeOption;
-                break;
-            }
-        }
-
-        return $option;
     }
 }

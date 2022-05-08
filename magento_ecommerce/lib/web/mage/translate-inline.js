@@ -149,7 +149,7 @@ define([
                 data: parameters,
                 loaderContext: this.element,
                 showLoader: true
-            }).always($.proxy(this._formSubmitComplete, this));
+            }).complete($.proxy(this._formSubmitComplete, this));
         },
 
         /**

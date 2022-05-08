@@ -81,12 +81,13 @@ class ViewTest extends TestCase
         $ratings = $this->block->getRating();
         $this->assertCount(2, $ratings);
         foreach ($ratings as $rating) {
-            $this->assertNotEmpty($rating->getRatingId());
             $this->assertEquals(
                 1,
                 Xpath::getElementsCountForXpath(
                     sprintf(
-                        "//div[contains(@id, 'rating-div-".$rating->getRatingId()."')]//span[contains(text(), '%s')]",
+                        "//div[contains(@class, 'rating-summary')]//span[contains(text(), '%s')]"
+                        . "/../..//span[contains(text(), '%s%%')]",
+                        $rating->getRatingCode(),
                         $rating->getPercent()
                     ),
                     $blockHtml

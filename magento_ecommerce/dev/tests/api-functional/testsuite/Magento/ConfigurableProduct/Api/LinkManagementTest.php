@@ -4,8 +4,6 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-declare(strict_types=1);
-
 namespace Magento\ConfigurableProduct\Api;
 
 use Magento\Catalog\Model\ResourceModel\Eav\Attribute;
@@ -45,10 +43,8 @@ class LinkManagementTest extends WebapiAbstract
 
     /**
      * @magentoApiDataFixture Magento/ConfigurableProduct/_files/product_configurable.php
-     *
-     * @return void
      */
-    public function testGetChildren(): void
+    public function testGetChildren()
     {
         $productSku = 'configurable';
 
@@ -76,10 +72,8 @@ class LinkManagementTest extends WebapiAbstract
      * @magentoApiDataFixture Magento/ConfigurableProduct/_files/product_configurable.php
      * @magentoApiDataFixture Magento/ConfigurableProduct/_files/product_simple_77.php
      * @magentoApiDataFixture Magento/ConfigurableProduct/_files/delete_association.php
-     *
-     * @return void
      */
-    public function testAddChild(): void
+    public function testAddChild()
     {
         $productSku = 'configurable';
         $childSku = 'simple_77';
@@ -91,10 +85,8 @@ class LinkManagementTest extends WebapiAbstract
      * Test the full flow of creating a configurable product and adding a child via REST
      *
      * @magentoApiDataFixture Magento/ConfigurableProduct/_files/configurable_attribute.php
-     *
-     * @return void
      */
-    public function testAddChildFullRestCreation(): void
+    public function testAddChildFullRestCreation()
     {
         $productSku = 'configurable-product-sku';
         $childSku = 'simple-product-sku';
@@ -104,7 +96,7 @@ class LinkManagementTest extends WebapiAbstract
 
         $this->addOptionToConfigurableProduct(
             $productSku,
-            (int)$attribute->getAttributeId(),
+            $attribute->getAttributeId(),
             [
                 [
                     'value_index' => $attribute->getOptions()[1]->getValue()
@@ -147,10 +139,8 @@ class LinkManagementTest extends WebapiAbstract
      * configurable product.
      *
      * @magentoApiDataFixture Magento/ConfigurableProduct/_files/configurable_attributes_for_position_test.php
-     *
-     * @return void
      */
-    public function testConfigurableOptionPositionPreservation(): void
+    public function testConfigurableOptionPositionPreservation()
     {
         $productSku = 'configurable-product-sku';
         $childProductSkus = [
@@ -170,7 +160,7 @@ class LinkManagementTest extends WebapiAbstract
             /** @var Attribute $attribute */
             $attribute = $this->attributeRepository->get('catalog_product', $attributeToAdd);
 
-            /** @var Option $options [] */
+            /** @var Option $options[] */
             $options = $attribute->getOptions();
             array_shift($options);
 
@@ -178,11 +168,11 @@ class LinkManagementTest extends WebapiAbstract
 
             $valueIndexesData = [];
             foreach ($options as $option) {
-                $valueIndexesData[]['value_index'] = $option->getValue();
+                $valueIndexesData []['value_index']= $option->getValue();
             }
             $this->addOptionToConfigurableProduct(
                 $productSku,
-                (int)$attribute->getAttributeId(),
+                $attribute->getAttributeId(),
                 $valueIndexesData,
                 $position
             );
@@ -294,14 +284,7 @@ class LinkManagementTest extends WebapiAbstract
         return $this->_webApiCall($serviceInfo, ['sku' => $productSku]);
     }
 
-    /**
-     * Perform add child product Api call
-     *
-     * @param string $productSku
-     * @param string $childSku
-     * @return array|int|string|float|bool
-     */
-    private function addChild(string $productSku, string $childSku)
+    private function addChild($productSku, $childSku)
     {
         $serviceInfo = [
             'rest' => [
@@ -317,13 +300,7 @@ class LinkManagementTest extends WebapiAbstract
         return $this->_webApiCall($serviceInfo, ['sku' => $productSku, 'childSku' => $childSku]);
     }
 
-    /**
-     * Perform create configurable product api call
-     *
-     * @param string $productSku
-     * @return array|bool|float|int|string
-     */
-    protected function createConfigurableProduct(string $productSku)
+    protected function createConfigurableProduct($productSku)
     {
         $requestData = [
             'product' => [
@@ -348,21 +325,8 @@ class LinkManagementTest extends WebapiAbstract
         return $this->_webApiCall($serviceInfo, $requestData);
     }
 
-    /**
-     * Add option to configurable product
-     *
-     * @param string $productSku
-     * @param int $attributeId
-     * @param array $attributeValues
-     * @param int $position
-     * @return array|bool|float|int|string
-     */
-    protected function addOptionToConfigurableProduct(
-        string $productSku,
-        int $attributeId,
-        array $attributeValues,
-        int $position = 0
-    ) {
+    protected function addOptionToConfigurableProduct($productSku, $attributeId, $attributeValues, $position = 0)
+    {
         $requestData = [
             'sku' => $productSku,
             'option' => [
@@ -375,7 +339,7 @@ class LinkManagementTest extends WebapiAbstract
         ];
         $serviceInfo = [
             'rest' => [
-                'resourcePath' => '/V1/configurable-products/' . $productSku . '/options',
+                'resourcePath' => '/V1/configurable-products/'. $productSku .'/options',
                 'httpMethod' => Request::HTTP_METHOD_POST,
             ],
             'soap' => [
@@ -417,67 +381,15 @@ class LinkManagementTest extends WebapiAbstract
 
     /**
      * @magentoApiDataFixture Magento/ConfigurableProduct/_files/product_configurable.php
-     *
-     * @return void
      */
-    public function testRemoveChild(): void
+    public function testRemoveChild()
     {
         $productSku = 'configurable';
         $childSku = 'simple_10';
         $this->assertTrue($this->removeChild($productSku, $childSku));
     }
 
-    /**
-     * @dataProvider errorsDataProvider
-     *
-     * @magentoApiDataFixture Magento/ConfigurableProduct/_files/product_configurable.php
-     * @magentoApiDataFixture Magento/Catalog/_files/second_product_simple.php
-     *
-     * @param string $parentSku
-     * @param string $childSku
-     * @param string $errorMessage
-     * @return void
-     */
-    public function testAddChildWithError(string $parentSku, string $childSku, string $errorMessage): void
-    {
-        $this->expectException(\Exception::class);
-        $this->expectExceptionMessage($errorMessage);
-        $this->addChild($parentSku, $childSku);
-    }
-
-    /**
-     * @return array
-     */
-    public function errorsDataProvider(): array
-    {
-        return [
-            'simple_instead_of_configurable' => [
-                'parent_sku' => 'simple2',
-                'child_sku' => 'configurable',
-                'error_message' => (string)__("The parent product doesn't have configurable product options."),
-            ],
-            'simple_with_empty_configurable_attribute_value' => [
-                'parent_sku' => 'configurable',
-                'child_sku' => 'simple2',
-                'error_message' => TESTS_WEB_API_ADAPTER === self::ADAPTER_SOAP
-                    ? (string)__(
-                        'The child product doesn\'t have the "%1" attribute value. Verify the value and try again.'
-                    )
-                    : (string)__(
-                        'The child product doesn\'t have the \\"%1\\" attribute value. Verify the value and try again.'
-                    ),
-            ],
-        ];
-    }
-
-    /**
-     * Remove child product
-     *
-     * @param string $productSku
-     * @param string $childSku
-     * @return array|bool|float|int|string
-     */
-    protected function removeChild(string $productSku, string $childSku)
+    protected function removeChild($productSku, $childSku)
     {
         $resourcePath = self::RESOURCE_PATH . '/%s/children/%s';
         $serviceInfo = [
@@ -496,16 +408,14 @@ class LinkManagementTest extends WebapiAbstract
     }
 
     /**
-     * Get child products
-     *
      * @param string $productSku
      * @return string[]
      */
-    protected function getChildren(string $productSku)
+    protected function getChildren($productSku)
     {
         $serviceInfo = [
             'rest' => [
-                'resourcePath' => self::RESOURCE_PATH . '/' . $productSku . '/children',
+                'resourcePath' => self::RESOURCE_PATH . '/' . $productSku  . '/children',
                 'httpMethod' => Request::HTTP_METHOD_GET
             ],
             'soap' => [

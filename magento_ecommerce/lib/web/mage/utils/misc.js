@@ -178,15 +178,13 @@ define([
                     }
                 })
                 .fail(function () {
-                    if (config.response) {
-                        config.response.status(undefined);
-                        config.response.status(false);
-                        config.response.data({
-                            error: true,
-                            messages: 'Something went wrong.',
-                            t: t
-                        });
-                    }
+                    config.response.status(undefined);
+                    config.response.status(false);
+                    config.response.data({
+                        error: true,
+                        messages: 'Something went wrong.',
+                        t: t
+                    });
                 })
                 .always(function () {
                     if (!config.ignoreProcessEvents) {

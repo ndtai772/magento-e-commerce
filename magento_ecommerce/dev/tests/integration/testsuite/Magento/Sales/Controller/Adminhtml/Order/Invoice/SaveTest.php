@@ -58,26 +58,6 @@ class SaveTest extends AbstractInvoiceControllerTest
         $this->dispatch('backend/sales/order_invoice/save');
         $invoice = $this->getInvoiceByOrder($order);
         $this->checkSuccess($invoice, 2);
-        $this->assertNull($this->transportBuilder->getSentMessage());
-    }
-
-    /**
-     * @magentoDataFixture Magento/Sales/_files/order.php
-     *
-     * @return void
-     */
-    public function testSendEmailOnInvoiceSaveEmailCopyOfInvoice(): void
-    {
-        $order = $this->getOrder('100000001');
-        $itemId = $order->getItemsCollection()->getFirstItem()->getId();
-        $post = $this->hydratePost([$itemId => 2], "", false, "1");
-        $this->prepareRequest(
-            $post,
-            ['order_id' => $order->getEntityId()]
-        );
-        $this->dispatch('backend/sales/order_invoice/save');
-        $invoice = $this->getInvoiceByOrder($order);
-        $this->checkSuccess($invoice, 2);
         $message = $this->transportBuilder->getSentMessage();
         $this->assertNotNull($message);
         $subject = __('Invoice for your %1 order', $order->getStore()->getFrontendName())->render();
@@ -218,21 +198,19 @@ class SaveTest extends AbstractInvoiceControllerTest
     }
 
     /**
-     * @magentoDataFixture Magento/Sales/_files/order_with_bundle_dynamic_price_no.php
+     * Get order items qty invoiced
      *
-     * @return void
+     * @param int $orderId
+     * @return array
      */
-    public function testOrderItemsQtyInvoicedForBundleDynamicPriceFalse(): void
+    private function getOrderItemsQtyInvoiced(int $orderId): array
     {
-        $order = $this->getOrder('100000001');
-        $entityId = $order->getEntityId();
+        $connection = $this->orderItemResource->getConnection();
+        $select = $connection->select()
+            ->from($this->orderItemResource->getMainTable(), OrderItemInterface::QTY_INVOICED)
+            ->where(OrderItemInterface::ORDER_ID . ' = ?', $orderId);
 
-        $this->prepareRequest([], ['order_id' => $entityId]);
-        $this->dispatch('backend/sales/order_invoice/save');
-
-        $ordered = $this->getOrderItemsQtyOrdered((int)$entityId);
-        $invoiced = $this->getOrderItemsQtyInvoiced((int)$entityId);
-        $this->assertEquals($ordered, $invoiced);
+        return $connection->fetchCol($select);
     }
 
     /**
@@ -315,37 +293,5 @@ class SaveTest extends AbstractInvoiceControllerTest
             $this->stringContains(sprintf('sales/order/view/order_id/%u', (int)$order->getEntityId()))
         );
         $this->assertSessionMessages($this->containsEqual((string)__($message)));
-    }
-
-    /**
-     * Get order items qty invoiced
-     *
-     * @param int $orderId
-     * @return array
-     */
-    private function getOrderItemsQtyInvoiced(int $orderId): array
-    {
-        $connection = $this->orderItemResource->getConnection();
-        $select = $connection->select()
-            ->from($this->orderItemResource->getMainTable(), OrderItemInterface::QTY_INVOICED)
-            ->where(OrderItemInterface::ORDER_ID . ' = ?', $orderId);
-
-        return $connection->fetchCol($select);
-    }
-
-    /**
-     * Get order items qty ordered
-     *
-     * @param int $orderId
-     * @return array
-     */
-    private function getOrderItemsQtyOrdered(int $orderId): array
-    {
-        $connection = $this->orderItemResource->getConnection();
-        $select = $connection->select()
-            ->from($this->orderItemResource->getMainTable(), OrderItemInterface::QTY_ORDERED)
-            ->where(OrderItemInterface::ORDER_ID . ' = ?', $orderId);
-
-        return $connection->fetchCol($select);
     }
 }

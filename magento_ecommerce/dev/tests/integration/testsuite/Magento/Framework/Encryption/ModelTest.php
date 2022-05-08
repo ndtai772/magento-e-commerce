@@ -33,8 +33,6 @@ class ModelTest extends \PHPUnit\Framework\TestCase
     {
         $encryptor = $this->_model;
 
-        // md5() here is not for cryptographic use just generate random string.
-        // phpcs:ignore Magento2.Security.InsecureFunction
         $initial = md5(uniqid());
         $encrypted = $encryptor->encrypt($initial);
         $this->assertNotEquals($initial, $encrypted);
@@ -43,8 +41,6 @@ class ModelTest extends \PHPUnit\Framework\TestCase
 
     public function testValidateKey()
     {
-        // md5() have to be use here.
-        // phpcs:ignore Magento2.Security.InsecureFunction
         $validKey = md5(uniqid());
         $this->_model->validateKey($validKey);
     }

@@ -107,8 +107,9 @@ class CreateHandlerTest extends \PHPUnit\Framework\TestCase
      */
     public function testExecuteWithIllegalFilename(string $imageFileName): void
     {
-        $this->expectException(\Magento\Framework\Exception\ValidatorException::class);
-        $this->expectExceptionMessageMatches('".+ is not a valid file path"');
+        $this->expectException(\Magento\Framework\Exception\FileSystemException::class);
+        $this->expectExceptionMessageMatches('".+ file doesn\'t exist."');
+        $this->expectExceptionMessageMatches('/^((?!\.\.\/).)*$/');
 
         $data = [
             'media_gallery' => ['images' => ['image' => ['file' => $imageFileName, 'label' => 'New image']]],

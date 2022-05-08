@@ -167,8 +167,6 @@ class BundleProductsFixture extends Fixture
             'price' => function ($index) use ($priceTypeClosure) {
                 // phpcs:ignore Magento2.Functions.DiscouragedFunction
                 return $priceTypeClosure($index) === LinkInterface::PRICE_TYPE_PERCENT
-                    // mt_rand() here is not for cryptographic use.
-                    // phpcs:ignore Magento2.Security.InsecureFunction
                     ? mt_rand(10, 90)
                     : $this->priceProvider->getPrice($index);
             },

@@ -33,6 +33,7 @@ class ConfigTest extends \PHPUnit\Framework\TestCase
     public function testGetEntityAttributeCodes()
     {
         $entityType = 'test';
+        CacheCleaner::cleanAll();
         $entityAttributeCodes1 = $this->config->getEntityAttributeCodes($entityType);
         $this->assertEquals(
             [
@@ -59,6 +60,7 @@ class ConfigTest extends \PHPUnit\Framework\TestCase
         $testEntityType = Bootstrap::getObjectManager()->create(\Magento\Eav\Model\Entity\Type::class)
             ->loadByCode('test');
         $attributeSetId = $testEntityType->getDefaultAttributeSetId();
+        CacheCleaner::cleanAll();
         $object = new DataObject(
             [
                 'attribute_set_id' => $attributeSetId,
@@ -84,6 +86,7 @@ class ConfigTest extends \PHPUnit\Framework\TestCase
     public function testGetAttributes()
     {
         $entityType = 'test';
+        CacheCleaner::cleanAll();
         $attributes1 = $this->config->getAttributes($entityType);
         $expectedAttributeCodes = [
             'attribute_for_search_1',
@@ -108,6 +111,7 @@ class ConfigTest extends \PHPUnit\Framework\TestCase
     public function testGetAttribute()
     {
         $entityType = 'test';
+        CacheCleaner::cleanAll();
         $attribute1 = $this->config->getAttribute($entityType, 'attribute_for_search_1');
         $this->assertEquals('attribute_for_search_1', $attribute1->getAttributeCode());
         $this->assertEquals('varchar', $attribute1->getBackendType());
@@ -149,7 +153,8 @@ class ConfigTest extends \PHPUnit\Framework\TestCase
         $config = Bootstrap::getObjectManager()->create(\Magento\Eav\Model\Config::class);
         $updatedAttribute = $config->getAttribute($entityType, 'foo');
         $this->assertEquals('foo', $updatedAttribute->getFrontendLabel());
-        CacheCleaner::clean(['eav']);
+        // Clean cache
+        CacheCleaner::cleanAll();
         $config = Bootstrap::getObjectManager()->create(\Magento\Eav\Model\Config::class);
         // Check that attribute data has changed
         $updatedAttributeAfterCacheClean = $config->getAttribute($entityType, 'foo');
@@ -188,20 +193,5 @@ class ConfigTest extends \PHPUnit\Framework\TestCase
         $config = Bootstrap::getObjectManager()->create(\Magento\Eav\Model\Config::class);
         $updatedAttributeAfterCacheClean = $config->getAttribute($entityType, 'foo');
         $this->assertEquals('bar', $updatedAttributeAfterCacheClean->getFrontendLabel());
-    }
-
-    /**
-     * @inheritDoc
-     */
-    protected function tearDown(): void
-    {
-        parent::tearDown();
-        $reflection = new \ReflectionObject($this);
-        foreach ($reflection->getProperties() as $property) {
-            if (!$property->isStatic() && 0 !== strpos($property->getDeclaringClass()->getName(), 'PHPUnit')) {
-                $property->setAccessible(true);
-                $property->setValue($this, null);
-            }
-        }
     }
 }

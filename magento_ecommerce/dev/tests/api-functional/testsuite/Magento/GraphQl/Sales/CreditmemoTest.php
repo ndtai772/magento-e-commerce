@@ -89,7 +89,8 @@ class CreditmemoTest extends GraphQlAbstract
         $expectedCreditMemoData = [
             [
                 'comments' => [
-                    ['message' => 'some_comment']
+                    ['message' => 'some_comment'],
+                    ['message' => 'some_other_comment']
                 ],
                 'items' => [
                     [

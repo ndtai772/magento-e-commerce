@@ -62,9 +62,9 @@ class ConfigCollectorTest extends TestCase
                 [],
                 true
             ),
-            'font-src' => new FetchPolicy('font-src', false, [], ['data'], true),
+            'font-src' => new FetchPolicy('font-src', false, [], [], true),
             'frame-src' => new FetchPolicy('frame-src', false, [], [], true, false, false, [], [], true),
-            'img-src' => new FetchPolicy('img-src', false, [], ['data'], true),
+            'img-src' => new FetchPolicy('img-src', false, [], [], true),
             'manifest-src' => new FetchPolicy('manifest-src', false, [], [], true),
             'media-src' => new FetchPolicy('media-src', false, [], [], true),
             'object-src' => new FetchPolicy('object-src', false, [], [], true),

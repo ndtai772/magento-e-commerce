@@ -6,26 +6,23 @@
 
 namespace Magento\Review\Block\Adminhtml\Edit;
 
-use Magento\Customer\Model\Customer;
-use Magento\Framework\Escaper;
-use Magento\Framework\Registry;
-use Magento\TestFramework\Helper\Bootstrap;
-use PHPUnit\Framework\TestCase;
-
-class FormTest extends TestCase
+class FormTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @magentoDataFixture Magento/Review/_files/customer_review.php
      */
     public function testCustomerOnForm()
     {
-        /** @var Customer $customer */
-        $customer = Bootstrap::getObjectManager()->create(Customer::class)
+        /** @var \Magento\Customer\Model\Customer $customer */
+        $customer = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
+            ->create(\Magento\Customer\Model\Customer::class)
             ->setWebsiteId(1)
             ->loadByEmail('customer@example.com');
-        $block = Bootstrap::getObjectManager()->create(Form::class);
-        /** @var Escaper $escaper */
-        $escaper = Bootstrap::getObjectManager()->get(Escaper::class);
+        $block = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
+            ->create(\Magento\Review\Block\Adminhtml\Edit\Form::class);
+        /** @var \Magento\Framework\Escaper $escaper */
+        $escaper = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
+            ->get(\Magento\Framework\Escaper::class);
         $this->assertStringMatchesFormat(
             '%A' . __(
                 '<a href="%1" onclick="this.target=\'blank\'">%2 %3</a> <a href="mailto:%4">(%4)</a>',
@@ -36,25 +33,5 @@ class FormTest extends TestCase
             ) . '%A',
             $block->toHtml()
         );
-    }
-
-    /**
-     * Verify review form hidden input will contain all review stores.
-     *
-     * @magentoDataFixture Magento/Review/_files/customer_review.php
-     * @return void
-     */
-    public function testStoresOnForm(): void
-    {
-        $registry = Bootstrap::getObjectManager()->get(Registry::class);
-        $review = $registry->registry('review_data');
-        $block = Bootstrap::getObjectManager()->create(Form::class);
-        foreach ($review->getStores() as $storeId) {
-            $regex = sprintf('/input id="select_stores" (.*) value="%d" type="hidden"/', $storeId);
-            $this->assertMatchesRegularExpression(
-                $regex,
-                $block->toHtml()
-            );
-        }
     }
 }

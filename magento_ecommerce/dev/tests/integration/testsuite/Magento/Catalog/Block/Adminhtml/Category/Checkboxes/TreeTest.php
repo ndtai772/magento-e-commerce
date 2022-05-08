@@ -3,55 +3,26 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-declare(strict_types=1);
-
 namespace Magento\Catalog\Block\Adminhtml\Category\Checkboxes;
 
-use Magento\Catalog\Helper\DefaultCategory;
-use Magento\Framework\ObjectManagerInterface;
-use Magento\Framework\Serialize\SerializerInterface;
-use Magento\Framework\View\LayoutInterface;
-use Magento\TestFramework\Helper\Bootstrap;
-use PHPUnit\Framework\TestCase;
-
 /**
- * Checks category chooser block behaviour
- *
- * @see \Magento\Catalog\Block\Adminhtml\Category\Checkboxes\Tree
- *
  * @magentoAppArea adminhtml
  * @magentoDbIsolation enabled
  * @magentoAppIsolation enabled
  */
-class TreeTest extends TestCase
+class TreeTest extends \PHPUnit\Framework\TestCase
 {
-    /** @var ObjectManagerInterface */
-    private $objectManager;
+    /** @var \Magento\Catalog\Block\Adminhtml\Category\Checkboxes\Tree */
+    protected $block;
 
-    /** @var Tree */
-    private $block;
-
-    /** @var SerializerInterface */
-    private $json;
-
-    /** @var DefaultCategory */
-    private $defaultCategoryHelper;
-
-    /**
-     * @inheritdoc
-     */
     protected function setUp(): void
     {
-        $this->objectManager = Bootstrap::getObjectManager();
-        $this->block = $this->objectManager->get(LayoutInterface::class)->createBlock(Tree::class);
-        $this->json = $this->objectManager->get(SerializerInterface::class);
-        $this->defaultCategoryHelper = $this->objectManager->get(DefaultCategory::class);
+        $this->block = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
+            \Magento\Catalog\Block\Adminhtml\Category\Checkboxes\Tree::class
+        );
     }
 
-    /**
-     * @return void
-     */
-    public function testSetGetCategoryIds(): void
+    public function testSetGetCategoryIds()
     {
         $this->block->setCategoryIds([1, 4, 7, 56, 2]);
         $this->assertEquals([1, 4, 7, 56, 2], $this->block->getCategoryIds());
@@ -59,10 +30,8 @@ class TreeTest extends TestCase
 
     /**
      * @magentoDataFixture Magento/Catalog/_files/categories.php
-     *
-     * @return void
      */
-    public function testGetTreeJson(): void
+    public function testGetTreeJson()
     {
         $jsonTree = $this->block->getTreeJson();
         $this->assertStringContainsString('Default Category (4)', $jsonTree);
@@ -75,18 +44,5 @@ class TreeTest extends TestCase
         $this->assertStringContainsString('Movable Position 3 (2)', $jsonTree);
         $this->assertStringContainsString('Category 12 (2)', $jsonTree);
         $this->assertStringMatchesFormat('%s"path":"1\/2\/%s\/%s\/%s"%s', $jsonTree);
-    }
-
-    /**
-     * @return void
-     */
-    public function testGetTreeJsonWithSelectedCategory(): void
-    {
-        $this->block->setCategoryIds($this->defaultCategoryHelper->getId());
-        $result = $this->json->unserialize($this->block->getTreeJson());
-        $item = reset($result);
-        $this->assertNotEmpty($item);
-        $this->assertStringContainsString('Default Category', $item['text']);
-        $this->assertTrue($item['checked']);
     }
 }

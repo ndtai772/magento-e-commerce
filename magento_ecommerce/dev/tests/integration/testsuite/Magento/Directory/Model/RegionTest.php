@@ -57,22 +57,7 @@ class RegionTest extends TestCase
             ['countryId' => 'MX'],
             ['countryId' => 'PL'],
             ['countryId' => 'IT'],
-            ['countryId' => 'BG'],
-            ['countryId' => 'AR'],
-            ['countryId' => 'BO'],
-            ['countryId' => 'CL'],
-            ['countryId' => 'EC'],
-            ['countryId' => 'GY'],
-            ['countryId' => 'PY'],
-            ['countryId' => 'PE'],
-            ['countryId' => 'SR'],
-            ['countryId' => 'VE'],
-            ['countryId' => 'PT'],
-            ['countryId' => 'IS'],
-            ['countryId' => 'SE'],
-            ['countryId' => 'GR'],
-            ['countryId' => 'DK'],
-            ['countryId' => 'AL']
+            ['countryId' => 'BG']
         ];
     }
 }

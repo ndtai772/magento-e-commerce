@@ -8,20 +8,20 @@ declare(strict_types=1);
 
 namespace Magento\WebapiAsync\Model;
 
-use Magento\Catalog\Api\Data\ProductInterface;
-use Magento\Catalog\Api\ProductRepositoryInterface;
+use Magento\Catalog\Api\Data\ProductInterface as Product;
+use Magento\TestFramework\MessageQueue\PreconditionFailedException;
+use Magento\TestFramework\MessageQueue\PublisherConsumerController;
+use Magento\TestFramework\MessageQueue\EnvironmentPreconditionException;
+use Magento\TestFramework\TestCase\WebapiAbstract;
+use Magento\TestFramework\Helper\Bootstrap;
 use Magento\Catalog\Model\ResourceModel\Product\Collection;
-use Magento\Framework\ObjectManagerInterface;
 use Magento\Framework\Phrase;
 use Magento\Framework\Registry;
 use Magento\Framework\Webapi\Exception;
-use Magento\Framework\Webapi\Rest\Request;
+use Magento\Catalog\Api\ProductRepositoryInterface;
+use Magento\Framework\ObjectManagerInterface;
 use Magento\Store\Model\Store;
-use Magento\TestFramework\Helper\Bootstrap;
-use Magento\TestFramework\MessageQueue\EnvironmentPreconditionException;
-use Magento\TestFramework\MessageQueue\PreconditionFailedException;
-use Magento\TestFramework\MessageQueue\PublisherConsumerController;
-use Magento\TestFramework\TestCase\WebapiAbstract;
+use Magento\Framework\Webapi\Rest\Request;
 
 /**
  * Check async request for multistore product creation service, scheduling bulk
@@ -86,24 +86,27 @@ class AsyncScheduleMultiStoreTest extends WebapiAbstract
      */
     private $registry;
 
-    /**
-     * @inheritDoc
-     */
     protected function setUp(): void
     {
-        $logFilePath = TESTS_TEMP_DIR . "/MessageQueueTestLog.txt";
         $this->objectManager = Bootstrap::getObjectManager();
+        $this->logFilePath = TESTS_TEMP_DIR . "/MessageQueueTestLog.txt";
         $this->registry = $this->objectManager->get(Registry::class);
 
+        $params = array_merge_recursive(
+            Bootstrap::getInstance()->getAppInitParams(),
+            ['MAGE_DIRS' => ['cache' => ['path' => TESTS_TEMP_DIR . '/cache']]]
+        );
+
+        /** @var PublisherConsumerController publisherConsumerController */
         $this->publisherConsumerController = $this->objectManager->create(
             PublisherConsumerController::class,
             [
                 'consumers' => $this->consumers,
-                'logFilePath' => $logFilePath,
-                'appInitParams' => Bootstrap::getInstance()->getAppInitParams(),
+                'logFilePath' => $this->logFilePath,
+                'appInitParams' => $params,
             ]
         );
-        $this->productRepository = $this->objectManager->get(ProductRepositoryInterface::class);
+        $this->productRepository = $this->objectManager->create(ProductRepositoryInterface::class);
 
         try {
             $this->publisherConsumerController->initialize();
@@ -121,16 +124,21 @@ class AsyncScheduleMultiStoreTest extends WebapiAbstract
     /**
      * @dataProvider storeProvider
      * @magentoApiDataFixture Magento/Store/_files/core_fixturestore.php
-     * @param string|null $storeCode
-     * @return void
      */
-    public function testAsyncScheduleBulkMultistore(?string $storeCode): void
+    public function testAsyncScheduleBulkMultistore($storeCode)
     {
+        if ($storeCode === self::STORE_CODE_FROM_FIXTURE) {
+            /** @var \Magento\Config\Model\Config $config */
+            $config = Bootstrap::getObjectManager()->get(\Magento\Config\Model\Config::class);
+            if (strpos($config->getConfigDataValue('catalog/search/engine'), 'elasticsearch') !== false) {
+                $this->markTestSkipped('MC-20452');
+            }
+        }
         $product = $this->getProductData();
         $this->_markTestAsRestOnly();
 
         /** @var Store $store */
-        $store = $this->objectManager->get(Store::class);
+        $store = $this->objectManager->create(Store::class);
         $store->load(self::STORE_CODE_FROM_FIXTURE);
         $this->assertEquals(
             self::STORE_NAME_FROM_FIXTURE,
@@ -139,9 +147,9 @@ class AsyncScheduleMultiStoreTest extends WebapiAbstract
         );
 
         try {
-            /** @var ProductInterface $productModel */
+            /** @var Product $productModel */
             $productModel = $this->objectManager->create(
-                ProductInterface::class,
+                Product::class,
                 ['data' => $product['product']]
             );
             $this->productRepository->save($productModel);
@@ -153,21 +161,16 @@ class AsyncScheduleMultiStoreTest extends WebapiAbstract
         $this->clearProducts();
     }
 
-    /**
-     * @param array $product
-     * @param string|null $storeCode
-     * @return void
-     */
-    private function asyncScheduleAndTest(array $product, $storeCode = null): void
+    private function asyncScheduleAndTest($product, $storeCode = null)
     {
-        $sku = $product['product'][ProductInterface::SKU];
-        $productName = $product['product'][ProductInterface::NAME];
-        $newProductName = $product['product'][ProductInterface::NAME] . $storeCode;
+        $sku = $product['product'][Product::SKU];
+        $productName = $product['product'][Product::NAME];
+        $newProductName = $product['product'][Product::NAME] . $storeCode;
 
         $this->skus[] = $sku;
 
-        $product['product'][ProductInterface::NAME] = $newProductName;
-        $product['product'][ProductInterface::TYPE_ID] = 'virtual';
+        $product['product'][Product::NAME] = $newProductName;
+        $product['product'][Product::TYPE_ID] = 'virtual';
 
         $response = $this->updateProductAsync($product, $sku, $storeCode);
 
@@ -194,14 +197,14 @@ class AsyncScheduleMultiStoreTest extends WebapiAbstract
             $serviceInfo = [
                 'rest' => [
                     'resourcePath' => self::REST_RESOURCE_PATH . '/' . $sku,
-                    'httpMethod' => Request::HTTP_METHOD_GET,
+                    'httpMethod' => Request::HTTP_METHOD_GET
                 ]
             ];
             $storeResponse = $this->_webApiCall($serviceInfo, $requestData, null, $checkingStore);
             if ($checkingStore == $storeCode || $storeCode == self::STORE_CODE_ALL) {
                 $this->assertEquals(
                     $newProductName,
-                    $storeResponse[ProductInterface::NAME],
+                    $storeResponse[Product::NAME],
                     sprintf(
                         'Product name in %s store is invalid after updating in store %s.',
                         $checkingStore,
@@ -211,7 +214,7 @@ class AsyncScheduleMultiStoreTest extends WebapiAbstract
             } else {
                 $this->assertEquals(
                     $productName,
-                    $storeResponse[ProductInterface::NAME],
+                    $storeResponse[Product::NAME],
                     sprintf(
                         'Product name in %s store is invalid after updating in store %s.',
                         $checkingStore,
@@ -222,9 +225,6 @@ class AsyncScheduleMultiStoreTest extends WebapiAbstract
         }
     }
 
-    /**
-     * @inheritDoc
-     */
     protected function tearDown(): void
     {
         $this->clearProducts();
@@ -232,10 +232,7 @@ class AsyncScheduleMultiStoreTest extends WebapiAbstract
         parent::tearDown();
     }
 
-    /**
-     * @return void
-     */
-    private function clearProducts(): void
+    private function clearProducts()
     {
         $size = $this->objectManager->create(Collection::class)
             ->addAttributeToFilter('sku', ['in' => $this->skus])
@@ -273,7 +270,7 @@ class AsyncScheduleMultiStoreTest extends WebapiAbstract
     /**
      * @return array
      */
-    public function getProductData(): array
+    public function getProductData()
     {
         $productBuilder = function ($data) {
             return array_replace_recursive(
@@ -283,26 +280,23 @@ class AsyncScheduleMultiStoreTest extends WebapiAbstract
         };
 
         return [
-            'product' => $productBuilder(
-                [
-                    ProductInterface::TYPE_ID => 'simple',
-                    ProductInterface::SKU => 'multistore-sku-test-1',
-                    ProductInterface::NAME => 'Test Name ',
-                ]
-            ),
+            'product' =>
+                $productBuilder(
+                    [
+                        Product::TYPE_ID => 'simple',
+                        Product::SKU => 'multistore-sku-test-1',
+                        Product::NAME => 'Test Name ',
+                    ]
+                ),
         ];
     }
 
-    /**
-     * @return array
-     */
-    public function storeProvider(): array
+    public function storeProvider()
     {
         $dataSets = [];
         foreach ($this->stores as $store) {
             $dataSets[$store] = [$store];
         }
-
         return $dataSets;
     }
 
@@ -312,28 +306,28 @@ class AsyncScheduleMultiStoreTest extends WebapiAbstract
      * @param array $productData
      * @return array
      */
-    private function getSimpleProductData($productData = []): array
+    private function getSimpleProductData($productData = [])
     {
         return [
-            ProductInterface::SKU => isset($productData[ProductInterface::SKU])
-                ? $productData[ProductInterface::SKU] : uniqid('sku-', true),
-            ProductInterface::NAME => isset($productData[ProductInterface::NAME])
-                ? $productData[ProductInterface::NAME] : uniqid('sku-', true),
-            ProductInterface::VISIBILITY => 4,
-            ProductInterface::TYPE_ID => 'simple',
-            ProductInterface::PRICE => 3.62,
-            ProductInterface::STATUS => 1,
-            ProductInterface::ATTRIBUTE_SET_ID => 4,
+            Product::SKU => isset($productData[Product::SKU])
+                ? $productData[Product::SKU] : uniqid('sku-', true),
+            Product::NAME => isset($productData[Product::NAME])
+                ? $productData[Product::NAME] : uniqid('sku-', true),
+            Product::VISIBILITY => 4,
+            Product::TYPE_ID => 'simple',
+            Product::PRICE => 3.62,
+            Product::STATUS => 1,
+            Product::TYPE_ID => 'simple',
+            Product::ATTRIBUTE_SET_ID => 4,
         ];
     }
 
     /**
-     * @param array $requestData
-     * @param string $sku
+     * @param $requestData
      * @param string|null $storeCode
      * @return mixed
      */
-    private function updateProductAsync(array $requestData, string $sku, $storeCode = null)
+    private function updateProductAsync($requestData, $sku, $storeCode = null)
     {
         $serviceInfo = [
             'rest' => [
@@ -345,19 +339,40 @@ class AsyncScheduleMultiStoreTest extends WebapiAbstract
         return $this->_webApiCall($serviceInfo, $requestData, null, $storeCode);
     }
 
-    /**
-     * @param array $product
-     * @return bool
-     */
-    public function assertProductCreation(array $product): bool
+    public function assertProductCreation($product)
     {
-        $sku = $product['product'][ProductInterface::SKU];
+        $sku = $product['product'][Product::SKU];
         $collection = $this->objectManager->create(Collection::class)
-            ->addAttributeToFilter(ProductInterface::SKU, ['eq' => $sku])
-            ->addAttributeToFilter(ProductInterface::TYPE_ID, ['eq' => 'virtual'])
+            ->addAttributeToFilter(Product::SKU, ['eq' => $sku])
+            ->addAttributeToFilter(Product::TYPE_ID, ['eq' => 'virtual'])
             ->load();
         $size = $collection->getSize();
 
         return $size > 0;
+    }
+
+    /**
+     * Remove test store
+     * //phpcs:disable
+     */
+    public static function tearDownAfterClass(): void
+    {
+        parent::tearDownAfterClass();
+        //phpcs:enable
+        /** @var Registry $registry */
+        $registry = Bootstrap::getObjectManager()->get(Registry::class);
+
+        $registry->unregister('isSecureArea');
+        $registry->register('isSecureArea', true);
+
+        /** @var Store $store*/
+        $store = Bootstrap::getObjectManager()->create(Store::class);
+        $store->load('fixturestore');
+        if ($store->getId()) {
+            $store->delete();
+        }
+
+        $registry->unregister('isSecureArea');
+        $registry->register('isSecureArea', false);
     }
 }

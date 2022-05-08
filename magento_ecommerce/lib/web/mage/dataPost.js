@@ -86,12 +86,12 @@ define([
                     actions: {
                         /** @inheritdoc */
                         confirm: function () {
-                            $form.appendTo('body').hide().trigger('submit');
+                            $form.appendTo('body').hide().submit();
                         }
                     }
                 });
             } else {
-                $form.appendTo('body').hide().trigger('submit');
+                $form.appendTo('body').hide().submit();
             }
         }
     });

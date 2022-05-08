@@ -7,29 +7,11 @@ namespace Magento\Webapi\Routing;
 
 class ServiceVersionV2Test extends \Magento\Webapi\Routing\BaseService
 {
-    /**
-     * @var string
-     */
-    private $version;
-
-    /**
-     * @var string
-     */
-    private $soapService;
-
-    /**
-     * @var string
-     */
-    private $restResourcePath;
-
-    /**
-     * @inheritDoc
-     */
     protected function setUp(): void
     {
-        $this->version = 'V2';
-        $this->soapService = 'testModule1AllSoapAndRestV2';
-        $this->restResourcePath = "/{$this->version}/testmodule1/";
+        $this->_version = 'V2';
+        $this->_soapService = 'testModule1AllSoapAndRestV2';
+        $this->_restResourcePath = "/{$this->_version}/testmodule1/";
     }
 
     /**
@@ -40,10 +22,10 @@ class ServiceVersionV2Test extends \Magento\Webapi\Routing\BaseService
         $itemId = 1;
         $serviceInfo = [
             'rest' => [
-                'resourcePath' => $this->restResourcePath . $itemId,
+                'resourcePath' => $this->_restResourcePath . $itemId,
                 'httpMethod' => \Magento\Framework\Webapi\Rest\Request::HTTP_METHOD_GET,
             ],
-            'soap' => ['service' => $this->soapService, 'operation' => $this->soapService . 'Item'],
+            'soap' => ['service' => $this->_soapService, 'operation' => $this->_soapService . 'Item'],
         ];
         $requestData = ['id' => $itemId];
         $item = $this->_webApiCall($serviceInfo, $requestData);
@@ -62,10 +44,10 @@ class ServiceVersionV2Test extends \Magento\Webapi\Routing\BaseService
         ];
         $serviceInfo = [
             'rest' => [
-                'resourcePath' => $this->restResourcePath,
+                'resourcePath' => $this->_restResourcePath,
                 'httpMethod' => \Magento\Framework\Webapi\Rest\Request::HTTP_METHOD_GET,
             ],
-            'soap' => ['service' => $this->soapService, 'operation' => $this->soapService . 'Items'],
+            'soap' => ['service' => $this->_soapService, 'operation' => $this->_soapService . 'Items'],
         ];
         $item = $this->_webApiCall($serviceInfo);
         $this->assertEquals($itemArr, $item, 'Items were not retrieved');
@@ -89,12 +71,12 @@ class ServiceVersionV2Test extends \Magento\Webapi\Routing\BaseService
         }
         $serviceInfo = [
             'rest' => [
-                'resourcePath' => $this->restResourcePath . $restFilter,
+                'resourcePath' => $this->_restResourcePath . $restFilter,
                 'httpMethod' => \Magento\Framework\Webapi\Rest\Request::HTTP_METHOD_GET,
             ],
             'soap' => [
-                'service' => $this->soapService,
-                'operation' => $this->soapService . 'Items',
+                'service' => $this->_soapService,
+                'operation' => $this->_soapService . 'Items',
             ],
         ];
         $requestData = [];
@@ -131,10 +113,10 @@ class ServiceVersionV2Test extends \Magento\Webapi\Routing\BaseService
         $itemId = 1;
         $serviceInfo = [
             'rest' => [
-                'resourcePath' => $this->restResourcePath . $itemId,
+                'resourcePath' => $this->_restResourcePath . $itemId,
                 'httpMethod' => \Magento\Framework\Webapi\Rest\Request::HTTP_METHOD_PUT,
             ],
-            'soap' => ['service' => $this->soapService, 'operation' => $this->soapService . 'Update'],
+            'soap' => ['service' => $this->_soapService, 'operation' => $this->_soapService . 'Update'],
         ];
         $requestData = ['entityItem' => ['id' => $itemId, 'name' => 'testName', 'price' => '4']];
         $item = $this->_webApiCall($serviceInfo, $requestData);
@@ -149,10 +131,10 @@ class ServiceVersionV2Test extends \Magento\Webapi\Routing\BaseService
         $itemId = 1;
         $serviceInfo = [
             'rest' => [
-                'resourcePath' => $this->restResourcePath . $itemId,
+                'resourcePath' => $this->_restResourcePath . $itemId,
                 'httpMethod' => \Magento\Framework\Webapi\Rest\Request::HTTP_METHOD_DELETE,
             ],
-            'soap' => ['service' => $this->soapService, 'operation' => $this->soapService . 'Delete'],
+            'soap' => ['service' => $this->_soapService, 'operation' => $this->_soapService . 'Delete'],
         ];
         $requestData = ['id' => $itemId, 'name' => 'testName'];
         $item = $this->_webApiCall($serviceInfo, $requestData);

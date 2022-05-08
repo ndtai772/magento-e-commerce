@@ -86,7 +86,7 @@ class GeneratorTest extends \PHPUnit\Framework\TestCase
 
     public function testGeneration()
     {
-        $this->assertFileDoesNotExist($this->_packPath);
+        $this->assertFileNotExists($this->_packPath);
 
         ComponentRegistrar::register(
             ComponentRegistrar::MODULE,

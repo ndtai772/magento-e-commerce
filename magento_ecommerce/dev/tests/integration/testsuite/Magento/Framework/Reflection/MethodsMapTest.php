@@ -24,6 +24,7 @@ class MethodsMapTest extends \PHPUnit\Framework\TestCase
 
     public function testGetMethodsMap()
     {
+        CacheCleaner::cleanAll();
         $data = $this->object->getMethodsMap(\Magento\Framework\Reflection\MethodsMap::class);
         $this->assertArrayHasKey('getMethodsMap', $data);
         $cachedData = $this->object->getMethodsMap(\Magento\Framework\Reflection\MethodsMap::class);
@@ -32,6 +33,7 @@ class MethodsMapTest extends \PHPUnit\Framework\TestCase
 
     public function testGetMethodParams()
     {
+        CacheCleaner::cleanAll();
         $data = $this->object->getMethodParams(
             \Magento\Framework\Reflection\MethodsMap::class,
             'getMethodParams'

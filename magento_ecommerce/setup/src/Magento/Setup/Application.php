@@ -43,6 +43,7 @@ class Application
 
         $listeners = $this->getListeners($serviceManager, $configuration);
         $application = new LaminasApplication(
+            $configuration,
             $serviceManager,
             $serviceManager->get('EventManager'),
             $serviceManager->get('Request'),

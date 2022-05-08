@@ -29,6 +29,27 @@ class CreateCustomOptionsTest extends AbstractBackendController
     protected $productSku = 'simple';
 
     /**
+     * @var ProductRepositoryInterface
+     */
+    private $productRepository;
+
+    /**
+     * @var ProductCustomOptionRepositoryInterface
+     */
+    private $optionRepository;
+
+    /**
+     * @inheritDoc
+     */
+    protected function setUp(): void
+    {
+        parent::setUp();
+
+        $this->productRepository = $this->_objectManager->create(ProductRepositoryInterface::class);
+        $this->optionRepository = $this->_objectManager->create(ProductCustomOptionRepositoryInterface::class);
+    }
+
+    /**
      * Test add to product custom option with type "field".
      *
      * @dataProvider productWithNewOptionsDataProvider
@@ -40,15 +61,14 @@ class CreateCustomOptionsTest extends AbstractBackendController
     public function testSaveCustomOptionWithTypeField(array $productPostData): void
     {
         $this->getRequest()->setPostValue($productPostData);
-        $product = $this->_objectManager->get(ProductRepositoryInterface::class)->get($this->productSku);
+        $product = $this->productRepository->get($this->productSku);
         $this->getRequest()->setMethod(HttpRequest::METHOD_POST);
         $this->dispatch('backend/catalog/product/save/id/' . $product->getEntityId());
         $this->assertSessionMessages(
             $this->containsEqual('You saved the product.'),
             MessageInterface::TYPE_SUCCESS
         );
-        $productOptions = $this->_objectManager->get(ProductCustomOptionRepositoryInterface::class)
-            ->getProductOptions($product);
+        $productOptions = $this->optionRepository->getProductOptions($product);
         $this->assertCount(2, $productOptions);
         foreach ($productOptions as $customOption) {
             $postOptionData = $productPostData['product']['options'][$customOption->getTitle()] ?? null;
@@ -253,20 +273,5 @@ class CreateCustomOptionsTest extends AbstractBackendController
                 ],
             ],
         ];
-    }
-
-    /**
-     * @inheritDoc
-     */
-    protected function tearDown(): void
-    {
-        parent::tearDown();
-        $reflection = new \ReflectionObject($this);
-        foreach ($reflection->getProperties() as $property) {
-            if (!$property->isStatic() && 0 !== strpos($property->getDeclaringClass()->getName(), 'PHPUnit')) {
-                $property->setAccessible(true);
-                $property->setValue($this, null);
-            }
-        }
     }
 }

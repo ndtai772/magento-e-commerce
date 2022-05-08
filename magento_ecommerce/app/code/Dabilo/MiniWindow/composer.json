@@ -1,0 +1,23 @@
+{
+    "name": "Dabilo/MiniWindow",
+    "description": "Magento 2 external API module",
+    "require": {
+        "php": ">=5.2.0"
+    },
+    "type": "magento2-module",
+    "version": "1.0.3",
+    "authors": [
+        {
+            "name": "Mage2Gen",
+            "email": "info@mage2gen.com"
+        }
+    ],
+    "autoload": {
+        "files": [
+            "registration.php"
+        ],
+        "psr-4": {
+            "Dabilo\\MiniWindow\\": ""
+        }
+    }
+}

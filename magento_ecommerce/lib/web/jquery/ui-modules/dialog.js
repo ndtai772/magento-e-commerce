@@ -12,7 +12,9 @@
 define([
     'jquery',
     'jquery-ui-modules/button',
-    'jquery-ui-modules/position'
+    'jquery-ui-modules/draggable',
+    'jquery-ui-modules/position',
+    'jquery-ui-modules/resizable'
 ], function ($, undefined) {
 
     var sizeRelatedOptions = {
@@ -105,22 +107,11 @@ define([
             this._createTitlebar();
             this._createButtonPane();
 
-            var widget = this;
-
-            if (this.options.draggable) {
-                require(['jquery-ui-modules/draggable'], function () {
-                    if($.fn.draggable) {
-                        widget._makeDraggable();
-                    }
-                });
+            if (this.options.draggable && $.fn.draggable) {
+                this._makeDraggable();
             }
-
-            if (this.options.resizable) {
-                require(['jquery-ui-modules/resizable'], function () {
-                    if($.fn.resizable) {
-                        widget._makeResizable();
-                    }
-                });
+            if (this.options.resizable && $.fn.resizable) {
+                this._makeResizable();
             }
 
             this._isOpen = false;

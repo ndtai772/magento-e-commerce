@@ -5,13 +5,10 @@
  */
 namespace Magento\ImportExport\Controller\Adminhtml;
 
-use Magento\TestFramework\Helper\Xpath;
-use Magento\TestFramework\TestCase\AbstractBackendController;
-
 /**
  * @magentoAppArea adminhtml
  */
-class ExportTest extends AbstractBackendController
+class ExportTest extends \Magento\TestFramework\TestCase\AbstractBackendController
 {
     /**
      * Set value of $_SERVER['HTTP_X_REQUESTED_WITH'] parameter here
@@ -21,8 +18,20 @@ class ExportTest extends AbstractBackendController
     protected $_httpXRequestedWith;
 
     /**
-     * @inheritdoc
+     * Get possible entity types
+     *
+     * @return array
      */
+    public function getEntityTypesDataProvider()
+    {
+        return [
+            'products' => ['$entityType' => 'catalog_product'],
+            'customers' => ['$entityType' => 'customer'],
+            // customer entities
+            'customers_customer_entities' => ['$entityType' => 'customer', '$customerEntityType' => 'customer']
+        ];
+    }
+
     protected function setUp(): void
     {
         parent::setUp();
@@ -32,9 +41,6 @@ class ExportTest extends AbstractBackendController
         }
     }
 
-    /**
-     * @inheritdoc
-     */
     protected function tearDown(): void
     {
         if ($this->_httpXRequestedWith !== null) {
@@ -50,14 +56,10 @@ class ExportTest extends AbstractBackendController
      * @dataProvider getEntityTypesDataProvider
      *
      * @param string $entityType
-     * @param string|null $customerEntityType
-     * @param array $expectedAttributes
+     * @param string $customerEntityType
      */
-    public function testGetFilterAction(
-        string $entityType,
-        string $customerEntityType = null,
-        array $expectedAttributes = []
-    ) {
+    public function testGetFilterAction($entityType, $customerEntityType = null)
+    {
         $this->getRequest()->setParam('isAjax', true);
 
         // Provide X_REQUESTED_WITH header in response to mark next action as ajax
@@ -70,35 +72,7 @@ class ExportTest extends AbstractBackendController
         }
         $this->dispatch($url);
 
-        $body = $this->getResponse()->getBody();
-        $this->assertStringContainsString('<div id="export_filter_grid"', $body);
-        foreach ($expectedAttributes as $attribute) {
-            $this->assertStringContainsString("name=\"export_filter[{$attribute}]\"", $body);
-        }
-    }
-
-    /**
-     * Get possible entity types
-     *
-     * @return array
-     */
-    public function getEntityTypesDataProvider()
-    {
-        return [
-            'products' => [
-                'entityType' => 'catalog_product',
-                'customerEntityType' => null,
-                'expectedAttributes' => ['category_ids']
-            ],
-            'customers' => [
-                'entityType' => 'customer'
-            ],
-            // customer entities
-            'customers_customer_entities' => [
-                'entityType' => 'customer',
-                'customerEntityType' => 'customer'
-            ]
-        ];
+        $this->assertStringContainsString('<div id="export_filter_grid"', $this->getResponse()->getBody());
     }
 
     /**
@@ -112,14 +86,14 @@ class ExportTest extends AbstractBackendController
 
         $this->assertEquals(
             1,
-            Xpath::getElementsCountForXpath(
+            \Magento\TestFramework\Helper\Xpath::getElementsCountForXpath(
                 '//fieldset[@id="base_fieldset"]',
                 $body
             )
         );
         $this->assertEquals(
             3,
-            Xpath::getElementsCountForXpath(
+            \Magento\TestFramework\Helper\Xpath::getElementsCountForXpath(
                 '//fieldset[@id="base_fieldset"]/div[contains(@class,"field")]',
                 $body
             )

@@ -26,7 +26,7 @@ $product->isObjectNew(true);
 $product->setTypeId(Type::TYPE_SIMPLE)
     ->setAttributeSetId($product->getDefaultAttributeSetId())
     ->setWebsiteIds([1])
-    ->setName('Simple Product Out Of Stock With Category')
+    ->setName('Simple Product Out Of Stock')
     ->setSku('out-of-stock-product')
     ->setPrice(10)
     ->setWeight(1)

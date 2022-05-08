@@ -858,16 +858,13 @@ fotoramaVersion = '4.6.4';
             dataFrame.thumbsReady = true;
         } else if (video.type === 'vimeo') {
             $.ajax({
-                url: getProtocol() + 'vimeo.com/api/oembed.json',
-                data: {
-                    url: 'https://vimeo.com/' + video.id
-                },
+                url: getProtocol() + 'vimeo.com/api/v2/video/' + video.id + '.json',
                 dataType: 'jsonp',
                 success: function (json) {
                     dataFrame.thumbsReady = true;
                     updateData(data, {
-                        img: json[0].thumbnail_url,
-                        thumb: json[0].thumbnail_url
+                        img: json[0].thumbnail_large,
+                        thumb: json[0].thumbnail_small
                     }, dataFrame.i, fotorama);
                 }
             });
@@ -1140,7 +1137,7 @@ fotoramaVersion = '4.6.4';
 
     function addEvent(el, e, fn, bool) {
         if (!e) return;
-        el.addEventListener ? el.addEventListener(e, fn, {passive: true}) : el.attachEvent('on' + e, fn);
+        el.addEventListener ? el.addEventListener(e, fn, !!bool) : el.attachEvent('on' + e, fn);
     }
 
     /**
@@ -1901,14 +1898,6 @@ fotoramaVersion = '4.6.4';
                     }
                 }
             });
-        }
-
-        /**
-         * Checks if current media object is YouTube or Vimeo video stream
-         * @returns {boolean}
-         */
-        function isVideo() {
-            return $((that.activeFrame || {}).$stageFrame || {}).hasClass('fotorama-video-container');
         }
 
         function allowKey(key) {
@@ -3157,7 +3146,8 @@ fotoramaVersion = '4.6.4';
             if (o_allowFullScreen && !that.fullScreen) {
 
                 //check that this is not video
-                if(isVideo()) {
+                var isVideo = $((that.activeFrame || {}).$stageFrame || {}).hasClass('fotorama-video-container');
+                if(isVideo) {
                     return;
                 }
 
@@ -3746,10 +3736,7 @@ fotoramaVersion = '4.6.4';
                 }
 
                 activeIndexes = [];
-
-                if (!isVideo()) {
-                    detachFrames(STAGE_FRAME_KEY);
-                }
+                detachFrames(STAGE_FRAME_KEY);
 
                 reset.ok = true;
 

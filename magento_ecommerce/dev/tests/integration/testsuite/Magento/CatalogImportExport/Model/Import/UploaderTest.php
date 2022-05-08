@@ -13,7 +13,6 @@ use Magento\Framework\App\Filesystem\DirectoryList;
 
 /**
  * Tests for the \Magento\CatalogImportExport\Model\Import\Uploader class.
- * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class UploaderTest extends \Magento\TestFramework\Indexer\TestCase
 {
@@ -83,6 +82,7 @@ class UploaderTest extends \Magento\TestFramework\Indexer\TestCase
     /**
      * Tests move with external url
      *
+     * @magentoAppIsolation enabled
      * @return void
      */
     public function testMoveWithExternalURL(): void
@@ -95,6 +95,7 @@ class UploaderTest extends \Magento\TestFramework\Indexer\TestCase
     }
 
     /**
+     * @magentoAppIsolation enabled
      * @return void
      */
     public function testMoveWithValidFile(): void
@@ -111,6 +112,7 @@ class UploaderTest extends \Magento\TestFramework\Indexer\TestCase
     /**
      * Check validation against temporary directory.
      *
+     * @magentoAppIsolation enabled
      * @return void
      */
     public function testMoveWithFileOutsideTemp(): void
@@ -133,6 +135,7 @@ class UploaderTest extends \Magento\TestFramework\Indexer\TestCase
     }
 
     /**
+     * @magentoAppIsolation enabled
      * @return void
      */
     public function testMoveWithInvalidFile(): void

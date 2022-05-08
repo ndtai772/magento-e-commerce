@@ -89,7 +89,7 @@ define([
                     expect(request.data).toBe(expectedEequestData);
 
                     return {
-                        always: jasmine.createSpy()
+                        complete: jasmine.createSpy()
                     };
                 });
 

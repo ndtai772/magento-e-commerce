@@ -10,11 +10,6 @@ use Magento\TestFramework\Helper;
 class Listener implements \PHPUnit\Framework\TestListener
 {
     /**
-     * @var \Magento\TestFramework\ErrorLog\Logger
-     */
-    private $logger;
-
-    /**
      * @inheritDoc
      * @SuppressWarnings(PHPMD.ShortVariable)
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)

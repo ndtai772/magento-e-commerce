@@ -5,8 +5,6 @@
  */
 namespace Magento\Search\Model\SearchEngine;
 
-use PHPUnit\Framework\MockObject\MockObject;
-
 /**
  * Class ConfigTest
  *
@@ -14,14 +12,6 @@ use PHPUnit\Framework\MockObject\MockObject;
  */
 class ConfigTest extends \PHPUnit\Framework\TestCase
 {
-    /**
-     * @var \Magento\Search\Model\SearchEngine\Config|MockObject
-     */
-    private $config;
-
-    /**
-     * @inheritDoc
-     */
     protected function setUp(): void
     {
         $xmlPath = __DIR__ . '/../../_files/search_engine.xml';

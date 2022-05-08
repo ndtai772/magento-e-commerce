@@ -27,6 +27,7 @@ use PHPUnit\Framework\TestCase;
  * Checks that product import with same images can be successfully done
  *
  * @magentoAppArea adminhtml
+ * @magentoDbIsolation enabled
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */

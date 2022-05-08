@@ -39,8 +39,6 @@ class DescriptionParagraphGenerator
      */
     public function generate()
     {
-        // mt_rand() here is not for cryptographic use.
-        // phpcs:ignore Magento2.Security.InsecureFunction
         $sentencesCount = mt_rand(
             $this->paragraphConfig['sentences']['count-min'],
             $this->paragraphConfig['sentences']['count-max']

@@ -21,7 +21,6 @@ class PriceTest extends \PHPUnit\Framework\TestCase
      * @var \Magento\Framework\ObjectManagerInterface
      */
     private $objectManager;
-
     /**
      * @var Rule
      */
@@ -103,8 +102,8 @@ class PriceTest extends \PHPUnit\Framework\TestCase
         );
         $this->indexerBuilder->reindexById($simpleProduct->getId());
         $this->assertEquals(
-            25,
-            $this->resourceRule->getRulePrice(new \DateTime(), $websiteId, 1, $simpleProduct->getId())
+            $this->resourceRule->getRulePrice(new \DateTime(), $websiteId, 1, $simpleProduct->getId()),
+            25
         );
     }
 

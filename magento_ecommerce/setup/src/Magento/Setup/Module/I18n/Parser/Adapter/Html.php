@@ -19,24 +19,19 @@ class Html extends AbstractAdapter
      * Covers
      * <span><!-- ko i18n: 'Next'--><!-- /ko --></span>
      * <th class="col col-method" data-bind="i18n: 'Select Method'"></th>
-     * @deprecated Not used anymore because of newly introduced constants
-     * @see self::REGEX_I18N_BINDING and self::REGEX_TRANSLATE_TAG_OR_ATTR
+     * @deprecated Not used anymore because of newly introduced constant
+     * @see self::HTML_REGEX_LIST
      */
-    const HTML_FILTER = "/i18n:\s?'(?<value>[^'\\\\]*(?:\\\\.[^'\\\\]*)*)'/";
+    const HTML_FILTER = "/i18n:\s?'(?<value>[^'\\\\]*(?:\\\\.[^'\\\\]*)*)'/i";
 
-    /**
-     * Covers
-     * <span><!-- ko i18n: 'Next'--><!-- /ko --></span>
-     * <th class="col col-method" data-bind="i18n: 'Select Method'"></th>
-     */
-    public const REGEX_I18N_BINDING = '/i18n:\s?\'([^\'\\\\]*(?:\\\\.[^\'\\\\]*)*)\'/';
-
-    /**
-     * Covers
-     * <translate args="'System Messages'"/>
-     * <span translate="'Examples'"></span>
-     */
-    public const REGEX_TRANSLATE_TAG_OR_ATTR = '/translate( args|)=\"\'([^\"\\\\]*(?:\\\\.[^\"\\\\]*)*)\'\"/';
+    private const HTML_REGEX_LIST = [
+        // <span><!-- ko i18n: 'Next'--><!-- /ko --></span>
+        // <th class="col col-method" data-bind="i18n: 'Select Method'"></th>
+        "/i18n:\s?'(?<value>[^'\\\\]*(?:\\\\.[^'\\\\]*)*)'/i",
+        // <translate args="'System Messages'"/>
+        // <span translate="'Examples'"></span>
+        "/translate( args|)=\"'(?<value>[^\"\\\\]*(?:\\\\.[^\"\\\\]*)*)'\"/i"
+    ];
 
     /**
      * @inheritdoc
@@ -64,24 +59,13 @@ class Html extends AbstractAdapter
             }
         }
 
-        $this->extractPhrases(self::REGEX_I18N_BINDING, $data, 2, 1);
-        $this->extractPhrases(self::REGEX_TRANSLATE_TAG_OR_ATTR, $data, 3, 2);
-        $this->extractPhrases(Js::REGEX_TRANSLATE_FUNCTION, $data, 3, 2);
-    }
+        foreach (self::HTML_REGEX_LIST as $regex) {
+            preg_match_all($regex, $data, $results, PREG_SET_ORDER);
 
-    /**
-     * @param string $regex
-     * @param string $data
-     * @param int $expectedGroupsCount
-     * @param int $valueGroupIndex
-     */
-    protected function extractPhrases(string $regex, string $data, int $expectedGroupsCount, int $valueGroupIndex): void
-    {
-        preg_match_all($regex, $data, $results, PREG_SET_ORDER);
-
-        for ($i = 0, $count = count($results); $i < $count; $i++) {
-            if (count($results[$i]) === $expectedGroupsCount && !empty($results[$i][$valueGroupIndex])) {
-                $this->_addPhrase($results[$i][$valueGroupIndex]);
+            for ($i = 0, $count = count($results); $i < $count; $i++) {
+                if (!empty($results[$i]['value'])) {
+                    $this->_addPhrase($results[$i]['value']);
+                }
             }
         }
     }

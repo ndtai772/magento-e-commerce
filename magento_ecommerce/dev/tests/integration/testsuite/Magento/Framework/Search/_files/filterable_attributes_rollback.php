@@ -42,10 +42,5 @@ if ($attribute->getId()) {
     $attribute->delete();
 }
 
-$attribute->loadByCode($productEntityTypeId, 'decimal_attribute');
-if ($attribute->getId()) {
-    $attribute->delete();
-}
-
 $registry->unregister('isSecureArea');
 $registry->register('isSecureArea', false);

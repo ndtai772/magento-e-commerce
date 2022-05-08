@@ -5,8 +5,6 @@
  */
 namespace Magento\Framework\Css\PreProcessor\Adapter;
 
-use Pelago\Emogrifier\CssInliner as EmogrifierCssInliner;
-
 class CssInlinerTest extends \PHPUnit\Framework\TestCase
 {
     /**
@@ -36,8 +34,8 @@ class CssInlinerTest extends \PHPUnit\Framework\TestCase
     {
         $html = file_get_contents($htmlFilePath);
         $css = file_get_contents($cssFilePath);
-        $this->model->setHtml($html);
         $this->model->setCss($css);
+        $this->model->setHtml($html);
         $result = $this->model->process();
         $this->assertStringContainsString($cssExpected, $result);
     }
@@ -70,9 +68,13 @@ class CssInlinerTest extends \PHPUnit\Framework\TestCase
      */
     public function testGetFilesEmogrifier($htmlFilePath, $cssFilePath, $cssExpected)
     {
+        $emogrifier = new \Pelago\Emogrifier;
+
         $html = file_get_contents($htmlFilePath);
         $css = file_get_contents($cssFilePath);
-        $result = EmogrifierCssInliner::fromHtml($html)->inlineCss($css)->render();
+        $emogrifier->setCss($css);
+        $emogrifier->setHtml($html);
+        $result = $emogrifier->emogrify();
 
         /**
          * This test was implemented for the issue which existed in the older version of Emogrifier.

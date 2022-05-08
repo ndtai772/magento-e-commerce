@@ -19,6 +19,7 @@ class AddressMetadataTest extends \PHPUnit\Framework\TestCase
 
     protected function setUp(): void
     {
+        CacheCleaner::cleanAll();
         $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
         $objectManager->configure(
             [

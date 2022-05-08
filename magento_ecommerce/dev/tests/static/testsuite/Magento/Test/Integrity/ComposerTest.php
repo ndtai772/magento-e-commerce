@@ -266,10 +266,8 @@ class ComposerTest extends \PHPUnit\Framework\TestCase
      */
     private function assertNoVersionSpecified(\StdClass $json)
     {
-        if (!in_array($json->name, self::$rootComposerModuleBlacklist)) {
-            $errorMessage = 'Version must not be specified in the root and package composer JSON files in Git';
-            $this->assertObjectNotHasAttribute('version', $json, $errorMessage);
-        }
+        $errorMessage = 'Version must not be specified in the root and package composer JSON files in Git';
+        $this->assertObjectNotHasAttribute('version', $json, $errorMessage);
     }
 
     /**

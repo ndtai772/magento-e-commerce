@@ -18,8 +18,6 @@ class AddressDataGenerator
     public function generateAddress()
     {
         return [
-            // mt_rand() here is not for cryptographic use.
-            // phpcs:ignore Magento2.Security.InsecureFunction
             'postcode' => mt_rand(10000, 99999)
         ];
     }

@@ -12,10 +12,25 @@ return [
         'template_path_stack' => [
             'setup' => __DIR__ . '/../view',
         ],
+        'strategies' => ['ViewJsonStrategy'],
+    ],
+    'translator' => [
+        'translation_file_patterns' => [
+            [
+                'type' => 'gettext',
+                'base_dir' => __DIR__ . '/../lang',
+                'pattern' => '%s.mo',
+            ],
+        ],
+    ],
+    'service_manager' => [
+        'aliases' => [
+            'translator' => 'MvcTranslator'
+        ]
     ],
     'controllers' => [
-        'factories' => [
-            \Magento\Setup\Controller\Index::class => \Laminas\ServiceManager\AbstractFactory\ReflectionBasedAbstractFactory::class,
+        'abstract_factories' => [
+            \Zend\Mvc\Controller\LazyControllerAbstractFactory::class,
         ],
     ],
 ];

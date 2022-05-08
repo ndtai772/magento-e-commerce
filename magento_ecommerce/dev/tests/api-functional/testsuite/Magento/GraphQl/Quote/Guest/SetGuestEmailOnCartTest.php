@@ -8,9 +8,6 @@ declare(strict_types=1);
 namespace Magento\GraphQl\Quote\Guest;
 
 use Magento\GraphQl\Quote\GetMaskedQuoteIdByReservedOrderId;
-use Magento\Quote\Model\Quote\Address;
-use Magento\Quote\Model\QuoteFactory;
-use Magento\Quote\Model\ResourceModel\Quote as QuoteResource;
 use Magento\TestFramework\Helper\Bootstrap;
 use Magento\TestFramework\TestCase\GraphQlAbstract;
 
@@ -24,22 +21,10 @@ class SetGuestEmailOnCartTest extends GraphQlAbstract
      */
     private $getMaskedQuoteIdByReservedOrderId;
 
-    /**
-     * @var QuoteFactory
-     */
-    private $quoteFactory;
-
-    /**
-     * @var QuoteResource
-     */
-    private $quoteResource;
-
     protected function setUp(): void
     {
         $objectManager = Bootstrap::getObjectManager();
         $this->getMaskedQuoteIdByReservedOrderId = $objectManager->get(GetMaskedQuoteIdByReservedOrderId::class);
-        $this->quoteFactory = $objectManager->get(QuoteFactory::class);
-        $this->quoteResource = $objectManager->get(QuoteResource::class);
     }
 
     /**
@@ -56,33 +41,6 @@ class SetGuestEmailOnCartTest extends GraphQlAbstract
         $this->assertArrayHasKey('setGuestEmailOnCart', $response);
         $this->assertArrayHasKey('cart', $response['setGuestEmailOnCart']);
         $this->assertEquals($email, $response['setGuestEmailOnCart']['cart']['email']);
-    }
-
-    /**
-     * @magentoApiDataFixture Magento/GraphQl/Quote/_files/guest/create_empty_cart.php
-     */
-    public function testSetGuestEmailOnCartWithDifferentEmailAddress()
-    {
-        $reservedOrderId = 'test_quote';
-        $secondEmail = 'attempt2@example.com';
-        $maskedQuoteId = $this->getMaskedQuoteIdByReservedOrderId->execute($reservedOrderId);
-
-        $email = 'attempt1@example.com';
-        $query = $this->getQuery($maskedQuoteId, $email);
-        $this->graphQlMutation($query);
-
-        $query = $this->getQuery($maskedQuoteId, $secondEmail);
-        $this->graphQlMutation($query);
-
-        $quote = $this->quoteFactory->create();
-        $this->quoteResource->load($quote, $reservedOrderId, 'reserved_order_id');
-        $addresses = $quote->getAddressesCollection();
-        $this->assertEquals(2, $addresses->count());
-        foreach ($addresses as $address) {
-            if ($address->getAddressType() === Address::ADDRESS_TYPE_SHIPPING) {
-                $this->assertEquals($secondEmail, $address->getEmail());
-            }
-        }
     }
 
     /**

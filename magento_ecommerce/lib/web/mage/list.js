@@ -42,7 +42,7 @@ define([
             this.element
                 .addClass('list-widget');
 
-            addButton.on('click', $.proxy(this.handleAdd, this));
+            addButton.bind('click', $.proxy(this.handleAdd, this));
 
             //handle remove
             destination.on('click', this.options.removeButton, $.proxy(this.removeItem, this));

@@ -17,8 +17,6 @@ use PHPUnit\Framework\TestCase;
 
 /**
  * Cover CSP util use cases.
- *
- * @magentoAppArea frontend
  */
 class InlineUtilTest extends TestCase
 {
@@ -72,18 +70,7 @@ class InlineUtilTest extends TestCase
      * @param string $result Expected result.
      * @param PolicyInterface[] $policiesExpected
      * @return void
-     *
      * @dataProvider getTags
-     * @magentoConfigFixture default_store csp/policies/storefront/scripts/policy_id script-src
-     * @magentoConfigFixture default_store csp/policies/storefront/scripts/none 0
-     * @magentoConfigFixture default_store csp/policies/storefront/scripts/self 1
-     * @magentoConfigFixture default_store csp/policies/storefront/scripts/inline 0
-     * @magentoConfigFixture default_store csp/policies/storefront/scripts/eval 0
-     * @magentoConfigFixture default_store csp/policies/storefront/scripts/event_handlers 1
-     * @magentoConfigFixture default_store csp/policies/storefront/styles/policy_id style-src
-     * @magentoConfigFixture default_store csp/policies/storefront/styles/none 0
-     * @magentoConfigFixture default_store csp/policies/storefront/styles/self 1
-     * @magentoConfigFixture default_store csp/policies/storefront/styles/inline 0
      */
     public function testRenderTag(
         string $tagName,
@@ -317,30 +304,5 @@ class InlineUtilTest extends TestCase
         $policies = $this->dynamicCollector->consumeAdded();
         $this->assertTrue(in_array(new FetchPolicy('script-src', false, ['https://test.magento.com']), $policies));
         $this->assertTrue(in_array(new FetchPolicy('script-src', false, [], [], false, true), $policies));
-    }
-
-    /**
-     * Verify that hashes are not calculated when inline sources are allowed.
-     *
-     * @return void
-     *
-     * @magentoConfigFixture default_store csp/policies/storefront/scripts/policy_id script-src
-     * @magentoConfigFixture default_store csp/policies/storefront/scripts/none 0
-     * @magentoConfigFixture default_store csp/policies/storefront/scripts/self 1
-     * @magentoConfigFixture default_store csp/policies/storefront/scripts/inline 1
-     * @magentoConfigFixture default_store csp/policies/storefront/scripts/eval 0
-     * @magentoConfigFixture default_store csp/policies/storefront/scripts/event_handlers 1
-     * @magentoConfigFixture default_store csp/policies/storefront/styles/policy_id style-src
-     * @magentoConfigFixture default_store csp/policies/storefront/styles/none 0
-     * @magentoConfigFixture default_store csp/policies/storefront/styles/self 1
-     * @magentoConfigFixture default_store csp/policies/storefront/styles/inline 1
-     */
-    public function testRenderWithInline(): void
-    {
-        $this->assertEquals(
-            '<script>alert(1);</script>',
-            $this->util->renderTag('script', [], 'alert(1);')
-        );
-        $this->assertEmpty($this->dynamicCollector->consumeAdded());
     }
 }

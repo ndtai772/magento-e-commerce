@@ -138,8 +138,6 @@ class PublisherConsumerController
     {
         foreach ($this->consumers as $consumer) {
             foreach ($this->getConsumerProcessIds($consumer) as $consumerProcessId) {
-                // exec() have to be here since this is test.
-                // phpcs:ignore Magento2.Security.InsecureFunction
                 exec("kill {$consumerProcessId}");
             }
         }
@@ -167,8 +165,6 @@ class PublisherConsumerController
      */
     private function getConsumerProcessIds($consumer)
     {
-        // exec() have to be here since this is test.
-        // phpcs:ignore Magento2.Security.InsecureFunction
         exec("ps ax | grep -v grep | grep '{$this->getConsumerStartCommand($consumer)}' | awk '{print $1}'", $output);
         return $output;
     }
@@ -236,8 +232,6 @@ class PublisherConsumerController
     {
         foreach ($this->consumers as $consumer) {
             if (!$this->getConsumerProcessIds($consumer)) {
-                // exec() have to be here since this is test.
-                // phpcs:ignore Magento2.Security.InsecureFunction
                 exec("{$this->getConsumerStartCommand($consumer, true)} > /dev/null &");
             }
             sleep(5);

@@ -82,6 +82,7 @@ class PreProcessorTest extends \PHPUnit\Framework\TestCase
      */
     public function testProcess(string $content, string $translation)
     {
+        CacheCleaner::cleanAll();
         $this->assertEquals($translation, $this->model->translate($content));
     }
 

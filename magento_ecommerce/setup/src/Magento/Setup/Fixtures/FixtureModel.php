@@ -74,11 +74,8 @@ class FixtureModel
     private $config;
 
     /**
-     * @var IndexerReindexCommand
-     */
-    private $reindexCommand;
-
-    /**
+     * Constructor
+     *
      * @param IndexerReindexCommand $reindexCommand
      * @param array $initArguments
      */

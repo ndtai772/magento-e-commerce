@@ -31,6 +31,7 @@ class ConfigTest extends \PHPUnit\Framework\TestCase
     public function testGetEntityAttributeCodes()
     {
         $entityType = 'catalog_product';
+        CacheCleaner::cleanAll();
         $this->assertEquals(
             $this->config->getEntityAttributeCodes($entityType),
             $this->config->getEntityAttributeCodes($entityType)
@@ -41,6 +42,7 @@ class ConfigTest extends \PHPUnit\Framework\TestCase
     {
         $entityType = 'catalog_product';
         $attributeCode = 'color';
+        CacheCleaner::cleanAll();
         $this->assertEquals(
             $this->config->getAttribute($entityType, $attributeCode),
             $this->config->getAttribute($entityType, $attributeCode)
@@ -50,6 +52,7 @@ class ConfigTest extends \PHPUnit\Framework\TestCase
     public function testGetEntityType()
     {
         $entityType = 'catalog_product';
+        CacheCleaner::cleanAll();
         $this->assertEquals(
             $this->config->getEntityType($entityType),
             $this->config->getEntityType($entityType)

@@ -267,7 +267,7 @@ var Cookie = {
 
         return null;
     },
-    write: function (cookieName, cookieValue, cookieLifeTime, samesite) {
+    write: function (cookieName, cookieValue, cookieLifeTime) {
         var expires = '';
 
         if (cookieLifeTime) {
@@ -278,9 +278,7 @@ var Cookie = {
         }
         var urlPath = '/' + BASE_URL.split('/').slice(3).join('/'); // Get relative path
 
-        samesite = '; samesite=' + (samesite ? samesite : 'lax');
-
-        document.cookie = escape(cookieName) + '=' + escape(cookieValue) + expires + '; path=' + urlPath + samesite;
+        document.cookie = escape(cookieName) + '=' + escape(cookieValue) + expires + '; path=' + urlPath;
     },
     clear: function (cookieName) {
         this.write(cookieName, '', -1);

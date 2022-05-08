@@ -10,7 +10,7 @@ define([
     'use strict';
 
     /* Form with auto submit feature */
-    $('form[data-auto-submit="true"]').trigger('submit');
+    $('form[data-auto-submit="true"]').submit();
 
     //Add form keys.
     $(document).on(

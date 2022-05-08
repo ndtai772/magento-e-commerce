@@ -551,8 +551,6 @@ define([
                 } else {
                     if (target) {
                         target.show();
-                        headElement = jQuery('.field-' + idTo).add('.field-chooser' + idTo);
-                        headElement.show();
                     }
 
                     if (isAnInputOrSelect && !isInheritCheckboxChecked) {
@@ -581,9 +579,6 @@ define([
                 }
 
                 if (headElement.length > 0) {
-                    headElement.hide();
-                } else {
-                    headElement = jQuery('.field-' + idTo).add('.field-chooser' + idTo);
                     headElement.hide();
                 }
 

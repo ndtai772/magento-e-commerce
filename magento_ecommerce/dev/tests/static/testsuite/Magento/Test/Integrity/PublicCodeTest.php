@@ -6,9 +6,6 @@
 namespace Magento\Test\Integrity;
 
 use Magento\Framework\App\Utility\Files;
-use ReflectionClass;
-use ReflectionException;
-use ReflectionParameter;
 
 /**
  * Tests @api annotated code integrity
@@ -280,7 +277,7 @@ class PublicCodeTest extends \PHPUnit\Framework\TestCase
                 && !$parameter->getType()->isBuiltin()
                 && !$this->isGenerated($parameter->getType()->getName())
             ) {
-                $parameterClass = $this->getParameterClass($parameter);
+                $parameterClass = $parameter->getClass();
                 /*
                  * We don't want to check integrity of @api coverage of classes
                  * that belong to different vendors, because it is too complicated.
@@ -289,7 +286,7 @@ class PublicCodeTest extends \PHPUnit\Framework\TestCase
                  *  we don't want to fail test, because Zend is considered public by default,
                  *  and we don't care if Zend classes are @api-annotated
                  */
-                if ($parameterClass && !$parameterClass->isInternal()
+                if (!$parameterClass->isInternal()
                     && $this->areClassesFromSameVendor($parameterClass->getName(), $class)
                     && !$this->isPublished($parameterClass)
                 ) {
@@ -298,21 +295,5 @@ class PublicCodeTest extends \PHPUnit\Framework\TestCase
             }
         }
         return $nonPublishedClasses;
-    }
-
-    /**
-     * Get class by reflection parameter
-     *
-     * @param ReflectionParameter $reflectionParameter
-     * @return ReflectionClass|null
-     * @throws ReflectionException
-     */
-    private function getParameterClass(ReflectionParameter $reflectionParameter): ?ReflectionClass
-    {
-        $parameterType = $reflectionParameter->getType();
-
-        return $parameterType && !$parameterType->isBuiltin()
-            ? new ReflectionClass($parameterType->getName())
-            : null;
     }
 }

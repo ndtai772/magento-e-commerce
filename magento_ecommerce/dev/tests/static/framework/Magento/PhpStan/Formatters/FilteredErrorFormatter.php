@@ -9,7 +9,6 @@ namespace Magento\PhpStan\Formatters;
 
 use PHPStan\Command\AnalysisResult;
 use PHPStan\Command\ErrorFormatter\TableErrorFormatter;
-use PHPStan\Command\ErrorFormatter\ErrorFormatter;
 use PHPStan\Command\Output;
 
 /**
@@ -38,23 +37,11 @@ use PHPStan\Command\Output;
  *
  * @see \Magento\PhpStan\Formatters\Fixtures\ClassWithIgnoreAnnotation
  */
-class FilteredErrorFormatter implements ErrorFormatter
+class FilteredErrorFormatter extends TableErrorFormatter
 {
     private const MUTE_ERROR_ANNOTATION = 'phpstan:ignore';
+
     private const NO_ERRORS = 0;
-
-    /**
-     * @var TableErrorFormatter
-     */
-    private $tableErrorFormatter;
-
-    /**
-     * @param TableErrorFormatter $tableErrorFormatter
-     */
-    public function __construct(TableErrorFormatter $tableErrorFormatter)
-    {
-        $this->tableErrorFormatter = $tableErrorFormatter;
-    }
 
     /**
      * @inheritdoc
@@ -62,21 +49,25 @@ class FilteredErrorFormatter implements ErrorFormatter
     public function formatErrors(AnalysisResult $analysisResult, Output $output): int
     {
         if (!$analysisResult->hasErrors()) {
-            $output->getStyle()->success('No errors');
+            $style = $output->getStyle();
+            $style->success('No errors');
             return self::NO_ERRORS;
         }
 
-        $clearedAnalysisResult = new AnalysisResult(
-            $this->clearIgnoredErrors($analysisResult->getFileSpecificErrors()),
-            $analysisResult->getNotFileSpecificErrors(),
-            $analysisResult->getInternalErrors(),
-            $analysisResult->getWarnings(),
-            $analysisResult->isDefaultLevelUsed(),
-            $analysisResult->getProjectConfigFile(),
-            $analysisResult->isResultCacheSaved()
+        $fileSpecificErrorsWithoutIgnoredErrors = $this->clearIgnoredErrors(
+            $analysisResult->getFileSpecificErrors()
         );
 
-        return $this->tableErrorFormatter->formatErrors($clearedAnalysisResult, $output);
+        $clearedAnalysisResult = new AnalysisResult(
+            $fileSpecificErrorsWithoutIgnoredErrors,
+            $analysisResult->getNotFileSpecificErrors(),
+            $analysisResult->getWarnings(),
+            $analysisResult->isDefaultLevelUsed(),
+            $analysisResult->hasInferrablePropertyTypesFromConstructor(),
+            $analysisResult->getProjectConfigFile()
+        );
+
+        return parent::formatErrors($clearedAnalysisResult, $output);
     }
 
     /**
