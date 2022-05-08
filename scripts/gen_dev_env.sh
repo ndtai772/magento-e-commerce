@@ -1,5 +1,9 @@
 #!/bin/bash
 
+if test -f ".env"; then
+    exit 0
+fi
+
 if [[ -z "${PUBLIC_KEY}" ]]; then
     read -p "magento repo public-key  : " PUBLIC_KEY
 fi
@@ -17,10 +21,6 @@ MYSQL_HOST=db
 
 # ELASTICSEATCH
 ELASTICSEARCH_HOST=elasticsearch
-
-# PHPFPM
-UID=$(id -u $(whoami))
-GID=$(id -g $(whoami))
 
 # MAGENTO REPO KEY
 PUBLIC_KEY=$PUBLIC_KEY

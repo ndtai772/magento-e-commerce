@@ -23,7 +23,7 @@ composer install
 
 curl -X GET $ELASTICSEARCH_HOST:9200
 
-bin/magento setup:install --with-associated-params \
+bin/magento setup:install \
     --db-host=$MYSQL_HOST \
     --db-name=$MYSQL_DATABASE \
     --db-user=$MYSQL_USER \

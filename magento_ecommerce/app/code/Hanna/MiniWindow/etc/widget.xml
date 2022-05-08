@@ -1,0 +1,30 @@
+<?xml version="1.0" ?>
+<widgets xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Widget:etc/widget.xsd">
+    <widget id="hanna_miniwindow_weather" class="Hanna\MiniWindow\Block\Widget\Weather">
+        <label>weather</label>
+        <description>weather</description>
+        <parameters>
+            <parameter name="current_weather" xsi:type="text" visible="true" sort_order="10">
+                <label>current_weather</label>
+            </parameter>
+        </parameters>
+    </widget>
+    <widget id="hanna_miniwindow_news" class="Hanna\MiniWindow\Block\Widget\News">
+        <label>news</label>
+        <description>news</description>
+        <parameters>
+            <parameter name="news" xsi:type="text" visible="true" sort_order="10">
+                <label>news</label>
+            </parameter>
+        </parameters>
+    </widget>
+    <widget id="hanna_miniwindow_currency" class="Hanna\MiniWindow\Block\Widget\Currency">
+        <label>currency</label>
+        <description>currency</description>
+        <parameters>
+            <parameter name="currency" xsi:type="text" visible="true" sort_order="10">
+                <label>currency</label>
+            </parameter>
+        </parameters>
+    </widget>
+</widgets>

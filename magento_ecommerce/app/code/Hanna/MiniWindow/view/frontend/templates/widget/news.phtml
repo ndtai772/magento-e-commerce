@@ -1,0 +1,54 @@
+<?php
+/** @var News $block */
+
+use Hanna\MiniWindow\Block\Widget\News;
+
+?>
+<?php
+$result = $block->getNewsInformation();
+$data = simplexml_load_string($result);
+$items = $data->channel->item;
+
+?>
+
+<?php if($block->getData('news')): ?>
+    <h2 class='news'><b><?php echo $block->getData('news'); ?></b>
+    </h2>
+                <?php
+                $i = 0;
+                foreach($items as $item)//lap
+                {
+                    if(++$i > 10) break;
+                    $title = $item->title;
+                    $des = $item->description;
+                    $link = $item->link;
+                ?>
+
+                <table class='table_news' width="800">
+                    <tr>
+                        <td style="color:#FF0000; font-weight:bold; text-decoration:none"><a
+                            href="<?  echo $link;?>"/><? echo $title ?></td>
+                    </tr>
+                    <tr>
+                        <td class="item_news"><? echo $des ?></td>
+                    </tr>
+                </table>
+                <?
+                }
+                ?>
+<?php endif; ?>
+
+<style>
+.item_news img {
+    width: 300px;
+    height: 200px;
+    float: left;
+    margin-right: 10px; 
+}
+
+.table_news { 
+  border: 1px solid #ddd;
+  text-align: left;
+  border-collapse: collapse;
+}
+</style>
