@@ -1,7 +1,14 @@
 # Magento E-commerce
 
 ## 1. Hướng dẫn cài
+
 Recommend: sử dụng docker-compose, [hướng dẫn chạy project bằng docker-compose](./docs/docker.md)
+
+```
+make init
+mysql -h 127.0.0.1 --port 3307 -umagento -pmagento ecom < ./db/dump.sql
+docker exec phpfpm sh /scripts/config.sh
+```
 
 Manual setup: [steps](./docs/manual_setup.md)
 
@@ -10,8 +17,8 @@ Sau khi chạy docker-compose như hướng dẫn, truy cập: http://localhost:
 
 Có thể dùng tài khoản admin có sẵn:
 ```
-username: admin
-password: admin123
+username: ndtai
+password: ndtai7720
 ```
 hoặc tạo tài khoản admin mới:
 ```
