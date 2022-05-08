@@ -1,17 +1,17 @@
 #!/bin/sh
 
-# CREDENTIALS="{
-#     \"http-basic\": {
-#         \"repo.magento.com\": {
-#             \"username\": \"$PUBLIC_KEY\",
-#             \"password\": \"$PRIVATE_KEY\"
-#         }
-#     }
-# }"
+CREDENTIALS="{
+    \"http-basic\": {
+        \"repo.magento.com\": {
+            \"username\": \"$PUBLIC_KEY\",
+            \"password\": \"$PRIVATE_KEY\"
+        }
+    }
+}"
 
-# echo $CREDENTIALS
-# echo $CREDENTIALS > auth.json
-# echo $CREDENTIALS > /var/www/.composer/auth.json
+echo $CREDENTIALS
+echo $CREDENTIALS > auth.json
+echo $CREDENTIALS > /var/www/.composer/auth.json
 
 chown -R :www-data .
 chmod u+x bin/magento
