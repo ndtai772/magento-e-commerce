@@ -31,3 +31,5 @@ bin/magento setup:install \
     --backend-frontname=admin \
     --search-engine=elasticsearch7 \
     --elasticsearch-host=$ELASTICSEARCH_HOST
+
+bin/magento setup:di:compile
