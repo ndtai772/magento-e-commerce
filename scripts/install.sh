@@ -1,31 +1,29 @@
-#!/bin/bash
+#!/bin/sh
 
-CREDENTIALS="{
-    \"http-basic\": {
-        \"repo.magento.com\": {
-            \"username\": \"$PUBLIC_KEY\",
-            \"password\": \"$PRIVATE_KEY\"
-        }
-    }
-}"
+# CREDENTIALS="{
+#     \"http-basic\": {
+#         \"repo.magento.com\": {
+#             \"username\": \"$PUBLIC_KEY\",
+#             \"password\": \"$PRIVATE_KEY\"
+#         }
+#     }
+# }"
 
-echo $CREDENTIALS
-echo $CREDENTIALS > auth.json
+# echo $CREDENTIALS
+# echo $CREDENTIALS > auth.json
 # echo $CREDENTIALS > /var/www/.composer/auth.json
 
-find var generated vendor pub/static pub/media app/etc -type f -exec chmod g+w {} +
-find var generated vendor pub/static pub/media app/etc -type d -exec chmod g+ws {} +
 chown -R :www-data .
 chmod u+x bin/magento
 
 composer install
 
-bash /scripts/wait-for-it.sh $MYSQL_HOST:3306 -t 0
-bash /scripts/wait-for-it.sh $ELASTICSEARCH_HOST:9200 -t 0
+# sh /scripts/wait-for-it.sh $MYSQL_HOST:3306 -t 0
+# sh /scripts/wait-for-it.sh $ELASTICSEARCH_HOST:9200 -t 0
 
 curl -X GET $ELASTICSEARCH_HOST:9200
 
-bin/magento setup:install \
+bin/magento setup:install --with-associated-params \
     --db-host=$MYSQL_HOST \
     --db-name=$MYSQL_DATABASE \
     --db-user=$MYSQL_USER \
@@ -33,11 +31,3 @@ bin/magento setup:install \
     --backend-frontname=admin \
     --search-engine=elasticsearch7 \
     --elasticsearch-host=$ELASTICSEARCH_HOST
-
-bin/magento deploy:mode:set developer
-
-bin/magento module:disable Magento_TwoFactorAuth
-
-bin/magento indexer:reindex
-
-bin/magento cache:flush

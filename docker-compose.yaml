@@ -12,11 +12,7 @@ services:
 
   phpfpm:
     env_file: .env
-    build:
-      context: ./docker/phpfpm
-      args:
-        - UID=${UID}
-        - GID=${GID}
+    image: biennd279/php-fpm-magento2
     container_name: phpfpm
     volumes:
       - ./magento_ecommerce:/var/www/html

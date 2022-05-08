@@ -8,10 +8,10 @@ prepare:
 
 install:
 	docker-compose up -d
-	docker exec phpfpm bash /scripts/install.sh
+	docker exec phpfpm sh /scripts/install.sh
 
 shell:
-	docker exec -it phpfpm bash
+	docker exec -it phpfpm sh
 
 clear:
 	docker-compose down -v
